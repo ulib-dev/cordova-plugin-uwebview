@@ -1,11 +1,13 @@
 package cordova.plugins;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.res.Resources;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
@@ -22,8 +24,8 @@ import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
 
 public class CordovaGeckoView extends CordovaPlugin {
-
-  @Override
+    public CallbackContext callback = null;
+    @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("loadUrlWithGeckoView")) {
             callback = callbackContext;
@@ -32,23 +34,24 @@ public class CordovaGeckoView extends CordovaPlugin {
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                  GeckoView view = findViewById(R.id.geckoview);
-                  GeckoSession session = new GeckoSession();
-                  GeckoRuntime runtime = GeckoRuntime.create(this);
-                  
-                  session.open(runtime);
-                  view.setSession(session);
-                  session.loadUri(url);
+                    Application app = cordova.getActivity().getApplication();
+                    String package_name = app.getPackageName();
+                    Resources resources = app.getResources();
+
+                    int layout = resources.getIdentifier("geckoview", "id", package_name);
+                    GeckoView view = cordova.getActivity().findViewById(layout);
+                    GeckoSession session = new GeckoSession();
+                    GeckoRuntime runtime = GeckoRuntime.create(cordova.getActivity());
+
+                    session.open(runtime);
+                    view.setSession(session);
+                    session.loadUri(url);
                 }
-            })
-                                                     
+            });
+
             return true;
         }
         return false;
     }
   
 }
-
-
-
-
