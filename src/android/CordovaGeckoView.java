@@ -40,7 +40,7 @@ public class CordovaGeckoView extends CordovaPlugin {
                   view.setSession(session);
                   session.loadUri(url);
                 }
-            }
+            })
                                                      
             return true;
         }
