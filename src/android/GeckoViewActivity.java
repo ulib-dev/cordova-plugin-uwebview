@@ -30,6 +30,8 @@ public class GeckoViewActivity extends Activity {
 
         session.open(runtime);
         view.setSession(session);
-        session.loadUri("https://google.com");
+
+        String url = getIntent().getStringExtra("URL");
+        session.loadUri(url);
     }
 }
