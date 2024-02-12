@@ -38,8 +38,10 @@ public class CordovaGeckoView extends CordovaPlugin {
                     String package_name = app.getPackageName();
                     Resources resources = app.getResources();
 
-                    int layout = resources.getIdentifier("geckoview", "id", package_name);
-                    GeckoView view = cordova.getActivity().findViewById(layout);
+                    int layout = resources.getIdentifier("geckoview_layout", "layout", package_name);
+                    cordova.getActivity().setContentView(layout);
+                    int gecko_view = resources.getIdentifier("geckoview", "id", package_name);
+                    GeckoView view = cordova.getActivity().findViewById(gecko_view);
                     GeckoSession session = new GeckoSession();
                     GeckoRuntime runtime = GeckoRuntime.create(cordova.getActivity());
 
