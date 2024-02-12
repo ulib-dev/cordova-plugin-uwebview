@@ -25,36 +25,42 @@ import org.mozilla.geckoview.GeckoView;
 
 public class CordovaGeckoView extends CordovaPlugin {
     public CallbackContext callback = null;
+    Context context = cordova.getActivity().getApplicationContext();
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("loadUrlWithGeckoView")) {
             callback = callbackContext;
-            cordova.setActivityResultCallback(this);
-            String url = args.getString(0);
-            this.cordova.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Application app = cordova.getActivity().getApplication();
-                    String package_name = app.getPackageName();
-                    Resources resources = app.getResources();
+            this.openGeckoViewActivity(context);
+            // cordova.setActivityResultCallback(this);
+            // String url = args.getString(0);
+            // this.cordova.getActivity().runOnUiThread(new Runnable() {
+            //     @Override
+            //     public void run() {
+            //         Application app = cordova.getActivity().getApplication();
+            //         String package_name = app.getPackageName();
+            //         Resources resources = app.getResources();
 
-                    int layout = resources.getIdentifier("geckoview_layout", "layout", package_name);
-                    cordova.getActivity().setContentView(layout);
-                    
-                    int gecko_view = resources.getIdentifier("geckoview", "id", package_name);
-                    GeckoView view = cordova.getActivity().findViewById(gecko_view);
-                    GeckoSession session = new GeckoSession();
-                    GeckoRuntime runtime = GeckoRuntime.create(cordova.getActivity());
+            //         int layout = resources.getIdentifier("geckoview_layout", "layout", package_name);
+            //         cordova.getActivity().setContentView(layout);
+            //         int gecko_view = resources.getIdentifier("geckoview", "id", package_name);
+            //         GeckoView view = cordova.getActivity().findViewById(gecko_view);
+            //         GeckoSession session = new GeckoSession();
+            //         GeckoRuntime runtime = GeckoRuntime.create(cordova.getActivity());
 
-                    session.open(runtime);
-                    view.setSession(session);
-                    session.loadUri(url);
-                }
-            });
+            //         session.open(runtime);
+            //         view.setSession(session);
+            //         session.loadUri(url);
+            //     }
+            // });
 
             return true;
         }
         return false;
+    }
+
+    private void openGeckoViewActivity(Context context) {
+        Intent intent = new Intent(context, GeckoViewActivity.class);
+        this.cordova.getActivity().startActivity(intent);
     }
   
 }
