@@ -1,0 +1,23 @@
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://maven.mozilla.org/maven2/" }
+    }
+}
+
+android {
+  compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+ext {
+    geckoviewChannel = "nightly"
+    geckoviewVersion = "70.0.20190712095934"
+}
+
+dependencies {
+    implementation "org.mozilla.geckoview:geckoview-${geckoviewChannel}:${geckoviewVersion}"
+}
