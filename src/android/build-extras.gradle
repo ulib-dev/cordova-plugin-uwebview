@@ -14,10 +14,10 @@ android {
 }
 
 ext {
-    geckoviewChannel = "nightly"
-    geckoviewVersion = "87.0.20210126092542"
+    geckoviewChannel = "geckoview"
+    geckoviewVersion = "110.0.20230227191043"
 }
 
 dependencies {
-    implementation "org.mozilla.geckoview:geckoview-${geckoviewChannel}:${geckoviewVersion}"
+    implementation "org.mozilla.geckoview:${geckoviewChannel}:${geckoviewVersion}"
 }
