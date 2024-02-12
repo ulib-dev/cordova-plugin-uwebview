@@ -12,8 +12,14 @@
                 <param name="android-package" value="cordova.plugins.CordovaGeckoView" />
             </feature>
         </config-file>
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+        </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
         <source-file src="src/android/CordovaGeckoView.java" target-dir="src/cordova/plugins" />
         <source-file src="src/android/res/layout/geckoViewLayout.xml" target-dir="res/layout" />
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
     </platform>
 </plugin>
