@@ -25,7 +25,7 @@ public class CordovaGeckoView extends CordovaPlugin {
 
   @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("loadUrl")) {
+        if (action.equals("loadUrlWithGeckoView")) {
             callback = callbackContext;
             cordova.setActivityResultCallback(this);
             String url = args.getString(0);
