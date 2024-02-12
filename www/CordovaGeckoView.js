@@ -1,5 +1,5 @@
 var exec = require('cordova/exec');
 
-exports.getGeckoView = function (arg0, success, error) {
-    exec(success, error, 'CordovaGeckoView', 'loadUrl', [arg0]);
+exports.loadUrlWithGeckoView = function (arg0, success, error) {
+    exec(success, error, 'CordovaGeckoView', 'loadUrlWithGeckoView', [arg0]);
 };
