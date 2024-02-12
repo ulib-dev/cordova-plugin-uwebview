@@ -30,14 +30,16 @@ public class CordovaGeckoView extends CordovaPlugin {
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("loadUrlWithGeckoView")) {
             callback = callbackContext;
-            this.openGeckoViewActivity(context);
+            String url = args.getString(0);
+            this.openGeckoViewActivity(context, url);
             return true;
         }
         return false;
     }
 
-    private void openGeckoViewActivity(Context context) {
+    private void openGeckoViewActivity(Context context, String url) {
         Intent intent = new Intent(context, GeckoViewActivity.class);
+        intent.putExtra("URL", url);
         this.cordova.getActivity().startActivity(intent);
     }
   
