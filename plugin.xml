@@ -19,7 +19,7 @@
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
         <source-file src="src/android/CordovaGeckoView.java" target-dir="src/cordova/plugins" />
-        <source-file src="src/android/res/layout/geckoViewLayout.xml" target-dir="res/layout" />
+        <source-file src="src/android/res/layout/geckoview_layout.xml" target-dir="res/layout" />
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
     </platform>
 </plugin>
