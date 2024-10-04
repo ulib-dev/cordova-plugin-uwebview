@@ -1,17 +1,46 @@
 {
   "name": "cordova-plugin-uwebview",
-  "version": "0.0.1",
-  "description": "",
+  "version": "2.0.0",
+  "description": "Cordova UWebView Plugin",
+  "types": "./index.d.ts",
   "cordova": {
     "id": "cordova-plugin-uwebview",
     "platforms": [
-      "android"
+      "android",
+      "ios",
+      "wp7",
+      "wp8",
+      "windows"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/cordova-plugin-uwebview"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
   "keywords": [
-    "ecosystem:cordova",
-    "cordova-android"
+    "cordova",
+    "uwebview"
   ],
-  "author": "u-dev",
-  "license": "ISC"
+  "scripts": {
+    "test": "npm run jshint",
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "0.1.0": {
+        "cordova": ">=3.0.0"
+      },
+      "3.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "author": "Apache Software Foundation",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "jshint": "^2.6.0"
+  }
 }

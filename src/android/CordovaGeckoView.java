@@ -14,41 +14,37 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.LOG;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.apache.cordova.CordovaArgs;
 
 public class CordovaGeckoView extends CordovaPlugin {
   private static final String TAG = "CordovaGeckoView"; // 日志标签
   public CallbackContext callback = null;
-  private Context context = cordova.getActivity().getApplicationContext();
-
   private GeckoViewRemoteVideoPlayer remoteVideoPlayer = null;
-  private FrameLayout geckoViewContainer;
 
+  @Override
+  public void initialize(final CordovaInterface cordova, CordovaWebView webView) {
+    LOG.v(TAG, "CordovaGeckoView: initialization");
+    super.initialize(cordova, webView);
 
-
-
-   @Override
-    public void initialize(final CordovaInterface cordova, CordovaWebView webView) {
-        LOG.v(TAG, "CordovaGeckoView: initialization");
-        super.initialize(cordova, webView);
-
-        //this.cordova.getActivity().runOnUiThread(new Runnable() {
-            //@Override
-            //public void run() {
-                // Clear flag FLAG_FORCE_NOT_FULLSCREEN which is set initially
-                // by the Cordova.
-                //Window window = cordova.getActivity().getWindow();
-                //window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-                // Read 'StatusBarBackgroundColor' from config.xml, default is #000000.
-                //setStatusBarBackgroundColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
-                // Read 'StatusBarStyle' from config.xml, default is 'lightcontent'.
-                //setStatusBarStyle(preferences.getString("StatusBarStyle", "lightcontent"));
-            //}
-        //});
+    //this.cordova.getActivity().runOnUiThread(new Runnable() {
+    //@Override
+    //public void run() {
+    // Clear flag FLAG_FORCE_NOT_FULLSCREEN which is set initially
+    // by the Cordova.
+    //Window window = cordova.getActivity().getWindow();
+    //window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+    // Read 'StatusBarBackgroundColor' from config.xml, default is #000000.
+    //setStatusBarBackgroundColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
+    // Read 'StatusBarStyle' from config.xml, default is 'lightcontent'.
+    //setStatusBarStyle(preferences.getString("StatusBarStyle", "lightcontent"));
+    //}
+    //});
   }
 
   @Override
-  public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+  public boolean execute(final String action, final CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
     Log.d(TAG, "GeckoView execute");
+    Context context = this.cordova.getActivity();
     if (action.equals("loadUrlWithGeckoView")) {
       callback = callbackContext;
       String url = args.getString(0);
@@ -73,7 +69,7 @@ public class CordovaGeckoView extends CordovaPlugin {
     this.cordova.getActivity().startActivity(intent);
   }
 
-  private void playRemoteVideo(Context context, final JSONArray args) {
+  private void playRemoteVideo(Context context, final CordovaArgs args) {
 
     try {
 

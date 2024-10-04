@@ -1,13 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-uwebview" version="0.0.1"
-    xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>UWebView</name>
-    <js-module name="UWebView" src="www/UWebView.js">
-        <clobbers target="UWebView" />
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-uwebview"
+    version="2.0.0">
+    <name>UWebView</name>    
+    <engines>
+            <engine name="cordova" version=">=3.0.0" />
+    </engines>
+    <js-module src="www/UWebView.js" name="UWebView">
+        <clobbers target="window.UWebView" />
     </js-module>
     <platform name="android">
-        <config-file parent="/*" target="res/xml/config.xml">
+        <config-file target="res/xml/config.xml" parent="/*">
             <feature name="UWebView">
                 <param name="android-package" value="com.udev.uwebview.CordovaGeckoView" />
                 <param name="onload" value="true" />
