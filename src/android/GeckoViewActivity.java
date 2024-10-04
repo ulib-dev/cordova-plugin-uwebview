@@ -5,16 +5,18 @@ import android.app.Application;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import org.apache.cordova.CordovaActivity;
+import android.util.Log;
 
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
 
 public class GeckoViewActivity extends Activity {
+  private static final String TAG = "GeckoViewActivity"; // 日志标签
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    Log.d(TAG, "GeckoView onCreate");
         super.onCreate(savedInstanceState);
         Application app = getApplication();
         String package_name = app.getPackageName();

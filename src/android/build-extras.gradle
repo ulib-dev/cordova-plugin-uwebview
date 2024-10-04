@@ -15,9 +15,13 @@ android {
 
 ext {
     geckoviewChannel = "geckoview"
-    geckoviewVersion = "114.0.20230619081400"
+    geckoviewVersion = "130.0.20240913135723"
 }
 
 dependencies {
     implementation "org.mozilla.geckoview:${geckoviewChannel}:${geckoviewVersion}"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.3.1"
+    implementation "androidx.startup:startup-runtime:1.0.0"
 }
