@@ -1,4 +1,4 @@
-package cordova.plugins;
+package com.udev.uwebview;
 
 import android.content.Context;
 import android.content.Intent;

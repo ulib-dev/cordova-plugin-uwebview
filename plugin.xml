@@ -1,15 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-geckoview" version="0.0.1"
+<plugin id="cordova-plugin-uwebview" version="0.0.1"
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>CordovaGeckoView</name>
-    <js-module name="CordovaGeckoView" src="www/CordovaGeckoView.js">
-        <clobbers target="cordova.plugins.CordovaGeckoView" />
+    <name>UWebView</name>
+    <js-module name="UWebView" src="www/UWebView.js">
+        <clobbers target="UWebView" />
     </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="CordovaGeckoView">
-                <param name="android-package" value="cordova.plugins.CordovaGeckoView" />
+            <feature name="UWebView">
+                <param name="android-package" value="com.udev.uwebview.CordovaGeckoView" />
+                <param name="onload" value="true" />
             </feature>
         </config-file>
         <config-file parent="/manifest" target="AndroidManifest.xml">
@@ -18,13 +19,15 @@
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
         </config-file>
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
-            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:exported="true" android:label="GeckoView Activity" android:launchMode="singleTop" android:name="cordova.plugins.GeckoViewActivity" android:theme="@style/Theme.AppCompat.NoActionBar" android:windowSoftInputMode="adjustResize" />
+            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:exported="true" android:label="GeckoView Activity" android:launchMode="singleTop" android:name="com.udev.uwebview.GeckoViewActivity" android:theme="@style/Theme.AppCompat.NoActionBar" android:windowSoftInputMode="adjustResize" />
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
-        <source-file src="src/android/CordovaGeckoView.java" target-dir="src/cordova/plugins" />
-        <source-file src="src/android/GeckoViewActivity.java" target-dir="src/cordova/plugins" />
-        <source-file src="src/android/GeckoViewRemoteVideoPlayer.java" target-dir="src/cordova/plugins" />        
-        <source-file src="src/android/res/layout/geckoview_layout.xml" target-dir="res/layout" />
+        <source-file src="src/android/CordovaGeckoView.java" target-dir="src/com/udev/uwebview" />
+        <source-file src="src/android/GeckoViewActivity.java" target-dir="src/com/udev/uwebview" />
+        <source-file src="src/android/GeckoViewRemoteVideoPlayer.java" target-dir="src/com/udev/uwebview" />        
+        <source-file src="src/android/res/layout/u_geckoview_layout.xml" target-dir="res/layout" />
+        <source-file src="src/android/res/layout/u_cordovageckview.xml" target-dir="res/layout" />      
+        <source-file src="src/android/res/layout/u_geckoview_remote_video.xml" target-dir="res/layout" />     
         <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
     </platform>
 </plugin>

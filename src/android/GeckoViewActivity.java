@@ -1,4 +1,4 @@
-package cordova.plugins;
+package com.udev.uwebview;
 
 import android.app.Activity;
 import android.app.Application;
@@ -21,7 +21,7 @@ public class GeckoViewActivity extends Activity {
         Application app = getApplication();
         String package_name = app.getPackageName();
         Resources resources = app.getResources();
-        int layout = resources.getIdentifier("geckoview_layout", "layout", package_name);
+        int layout = resources.getIdentifier("u_geckoview_layout", "layout", package_name);
         setContentView(layout);
 
         

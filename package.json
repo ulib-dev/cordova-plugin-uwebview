@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-geckoview",
+  "name": "cordova-plugin-uwebview",
   "version": "0.0.1",
   "description": "",
   "cordova": {
-    "id": "cordova-plugin-geckoview",
+    "id": "cordova-plugin-uwebview",
     "platforms": [
       "android"
     ]
@@ -12,6 +12,6 @@
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Ankit Jain",
+  "author": "u-dev",
   "license": "ISC"
 }
