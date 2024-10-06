@@ -16,6 +16,7 @@ import org.apache.cordova.CordovaInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.geckoview.BuildConfig;
+import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
@@ -28,7 +29,7 @@ import java.io.InputStream;
 
 public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private static final String TAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
-  private static final String EXTENSION_LOCATION = "resource://android/assets/wwww/messaging/";
+  private static final String EXTENSION_LOCATION = "resource://android/assets/messaging/";
   private static final String EXTENSION_ID = "messaging@example.com";
   private static WebExtension.Port mPort;
   private static String GeckoViewRemoteVideoPlayerHtml = "";
@@ -84,6 +85,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     this(cordova.getActivity(), width, height, x, y);
   }
 
+  @SuppressLint("WrongThread")
   public GeckoViewRemoteVideoPlayer(@NonNull AppCompatActivity appCompatActivity, int width, int height, int x, int y) throws IOException {
 
     super(appCompatActivity);
@@ -133,34 +135,17 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       }
 
     });
-    session.setMediaSessionDelegate(new MediaSession.Delegate() {
-      @Override
-      public void onMetadata(@NonNull GeckoSession session, @NonNull MediaSession mediaSession, @NonNull MediaSession.Metadata meta) {
 
 
-      }
 
-      @Override
-      public void onPause(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
 
-      }
 
-      @Override
-      public void onPlay(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
 
-      }
 
-      @Override
-      public void onStop(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
 
-      }
 
-      @Override
-      public void onActivated(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
 
-      }
 
-    });
 
     // 将 GeckoView 添加到容器中
     this.addView(geckoView, params);

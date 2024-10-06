@@ -5,6 +5,9 @@ let JSBridge = {
             action: "JSBridge",
             data: message
         });
+    },
+    postMessage2: function (data) {
+        browser.runtime.sendMessage(data);
     }
 }
 window.wrappedJSObject.JSBridge = cloneInto(

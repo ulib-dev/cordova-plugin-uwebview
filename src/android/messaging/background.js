@@ -1,7 +1,8 @@
 'use strict';
 
 // Establish connection with app
-const port = (typeof browser !== 'undefined' && browser.runtime.connectNative) ? browser.runtime.connectNative("Android") : null;
+const port = (typeof browser !== 'undefined' && browser.runtime.connectNative) ? browser.runtime.connectNative("browser") : null;
+
 
 async function sendMessageToTab(message) {
     try {
@@ -15,20 +16,6 @@ async function sendMessageToTab(message) {
         }
     } catch (e) {
         console.log(`background:sendMessageToTab:req:error:${e}`);
-        return e.toString();
-    }
-}
-
-async function sendMessageToApp(message) {
-    try {
-        if (typeof browser !== 'undefined' && browser.tabs) {
-            let tabs = await browser.tabs.query({});
-            return await browser.tabs.sendMessage(
-                tabs[tabs.length - 1].id,
-                message
-            );
-        }
-    } catch (e) {
         return e.toString();
     }
 }

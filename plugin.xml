@@ -32,7 +32,8 @@
         <source-file src="src/android/res/layout/u_geckoview_layout.xml" target-dir="res/layout" />
         <source-file src="src/android/res/layout/u_cordovageckview.xml" target-dir="res/layout" />      
         <source-file src="src/android/res/layout/u_geckoview_remote_video.xml" target-dir="res/layout" />     
-        <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />   
+        <!-- <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />    -->
+        <source-file src="video-template/dist/geckoview_remote_video_player.html" target-dir="res/raw" />  
         <source-file src="src/android/messaging/.eslintrc.js" target-dir="assets/messaging" />  
         <source-file src="src/android/messaging/background.js" target-dir="assets/messaging" />   
         <source-file src="src/android/messaging/content.js" target-dir="assets/messaging" />  
