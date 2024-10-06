@@ -168,6 +168,7 @@ player.on("ready", () => {
   const fullscreenButton = controls.querySelector(".plyr__control--fullscreen");
   // 将自定义按钮插入到全屏按钮之前
   controls.insertBefore(customButton, fullscreenButton);
+  play();
 });
 
 
