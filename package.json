@@ -2,6 +2,7 @@
   "name": "cordova-plugin-uwebview",
   "version": "2.0.0",
   "description": "Cordova UWebView Plugin",
+  "main": "src/uwebview.js",
   "types": "./index.d.ts",
   "cordova": {
     "id": "cordova-plugin-uwebview",
@@ -29,14 +30,7 @@
     "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
   },
   "engines": {
-    "cordovaDependencies": {
-      "0.1.0": {
-        "cordova": ">=3.0.0"
-      },
-      "3.0.0": {
-        "cordova": ">100"
-      }
-    }
+    "cordovaDependencies": {}
   },
   "author": "Apache Software Foundation",
   "license": "Apache-2.0",

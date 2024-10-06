@@ -1,0 +1,35 @@
+name: Publish to npm
+
+on:
+  push:
+    branches:
+      - main  # 当代码推送到 `main` 分支时触发发布
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Set up Node.js environment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # 选择合适的 Node.js 版本
+        registry-url: 'https://registry.npmjs.org/'  # 设置 npmjs 的 registry
+
+    # Install dependencies and run build if necessary
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build  # 如果需要构建步骤，执行此行
+
+    # Publish to npmjs
+    - name: Publish to npm
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # 使用 GitHub Secrets 中配置的 npm token 进行身份验证

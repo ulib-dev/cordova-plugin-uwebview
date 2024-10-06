@@ -8,7 +8,7 @@
     <engines>
             <engine name="cordova" version=">=3.0.0" />
     </engines>
-    <js-module src="www/UWebView.js" name="UWebView">
+    <js-module src="www/uwebview.js" name="uwebview">
         <clobbers target="window.UWebView" />
     </js-module>
     <platform name="android">
@@ -18,14 +18,13 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
         <config-file parent="/manifest" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
         </config-file>
-        <config-file parent="/manifest/application" target="AndroidManifest.xml">
-            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:exported="true" android:label="GeckoView Activity" android:launchMode="singleTop" android:name="com.udev.uwebview.GeckoViewActivity" android:theme="@style/Theme.AppCompat.NoActionBar" android:windowSoftInputMode="adjustResize" />
-        </config-file>
+ 
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
         <source-file src="src/android/CordovaGeckoView.java" target-dir="src/com/udev/uwebview" />
         <source-file src="src/android/GeckoViewActivity.java" target-dir="src/com/udev/uwebview" />
@@ -33,6 +32,6 @@
         <source-file src="src/android/res/layout/u_geckoview_layout.xml" target-dir="res/layout" />
         <source-file src="src/android/res/layout/u_cordovageckview.xml" target-dir="res/layout" />      
         <source-file src="src/android/res/layout/u_geckoview_remote_video.xml" target-dir="res/layout" />     
-        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
+        <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />   
     </platform>
 </plugin>

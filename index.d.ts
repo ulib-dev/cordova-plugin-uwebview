@@ -1,4 +1,4 @@
-interface PlayRemoteVideoOptions {
+export declare interface PlayRemoteVideoOptions {
   url: string;
   width?: number;
   height?: number;
@@ -6,7 +6,7 @@ interface PlayRemoteVideoOptions {
   y?: number;
 }
 
-interface UWebView {
+export declare class UWebView {
   loadUrlWithGeckoView(
     url: string,
     success?: () => void,
@@ -18,6 +18,9 @@ interface UWebView {
     error?: (err: any) => void
   ): void;
   destroyRemoteVideo(success?: () => void, error?: (err: any) => void): void;
+  setRemoteVideoFullScreen(
+    full: boolean,
+    success?: () => void,
+    error?: (err: any) => void
+  ): void;
 }
-
-declare var StatusBar: StatusBar;

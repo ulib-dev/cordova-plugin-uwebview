@@ -1,0 +1,38 @@
+{
+    "manifest_version": 2,
+    "name": "messaging",
+    "description": "Uses the proxy API to block requests to specific hosts.",
+    "version": "3.0",
+    "browser_specific_settings": {
+      "gecko": {
+        "strict_min_version": "65.0",
+        "id": "messaging@example.com"
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "content.js"
+        ],
+        "run_at": "document_start"
+      }
+    ],
+    "background": {
+      "scripts": [
+        "background.js"
+      ]
+    },
+    "permissions": [
+      "nativeMessaging",
+      "nativeMessagingFromContent",
+      "geckoViewAddons",
+      "webNavigation",
+      "geckoview",
+      "tabs",
+      "<all_urls>"
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  }

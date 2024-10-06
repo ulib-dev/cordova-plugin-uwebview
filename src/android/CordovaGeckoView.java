@@ -8,14 +8,14 @@ import android.util.TypedValue;
 import android.widget.FrameLayout;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.LOG;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.apache.cordova.CordovaArgs;
 
+import java.io.IOException;
 public class CordovaGeckoView extends CordovaPlugin {
   private static final String TAG = "CordovaGeckoView"; // 日志标签
   public CallbackContext callback = null;
@@ -100,7 +100,11 @@ public class CordovaGeckoView extends CordovaPlugin {
       final int finalHeight = height;
       if (this.remoteVideoPlayer == null) {
         cordova.getActivity().runOnUiThread(() -> {
+          try {
           this.remoteVideoPlayer = new GeckoViewRemoteVideoPlayer(this.cordova, finalWidth, finalHeight, x, y);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
           this.remoteVideoPlayer.Play(url);
         });
       } else {
