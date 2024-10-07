@@ -4,12 +4,12 @@ import "../node_modules/plyr/dist/plyr.css";
 import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 // 模拟发送消息到应用
 function mySendMessageToApp(message) {
-    // 这是一个模拟的函数，你可以根据你的实际需求实现与应用程序的通信逻辑
-    console.log("Message sent to app:", message);
-    if (window.JSBridge) {
-      window.JSBridge.postMessage2(message);
-    }
+  // 这是一个模拟的函数，你可以根据你的实际需求实现与应用程序的通信逻辑
+  console.log("Message sent to app:", message);
+  if (window.JSBridge) {
+    window.JSBridge.postMessage2(message);
   }
+}
 // 初始化 Plyr 播放器
 const player = new Plyr("#player", {
   hideControls: false, // 设置为 false，控件将不会自动隐藏
@@ -168,7 +168,11 @@ player.on("ready", () => {
   const fullscreenButton = controls.querySelector(".plyr__control--fullscreen");
   // 将自定义按钮插入到全屏按钮之前
   controls.insertBefore(customButton, fullscreenButton);
-  play();
+  player.muted = true; // 确保静音
 });
 
-
+window.onload = () => {
+  player.play().catch((error) => {
+    console.error("Auto play failed:", error);
+  });
+};

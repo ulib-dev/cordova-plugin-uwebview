@@ -36,7 +36,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private final WebExtension.PortDelegate mPortDelegate = new WebExtension.PortDelegate() {
     @Override
     public void onPortMessage(final @NonNull Object message,
-                              final @NonNull WebExtension.Port port) {
+        final @NonNull WebExtension.Port port) {
       Log.e("MessageDelegate", "from extension: " + message);
       try {
 
@@ -45,8 +45,8 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
         if (method.contains("captureScreenshot")) {
           JSONObject request = new JSONObject();
           String dataURL = request.getString("dataURL");
-          //request.put("method", "androidView('hasCamera','0')");
-          //mPort.postMessage(request);
+          // request.put("method", "androidView('hasCamera','0')");
+          // mPort.postMessage(request);
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -81,12 +81,14 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   // 全屏状态标志
   private boolean isFullScreen = false;
 
-  public GeckoViewRemoteVideoPlayer(@NonNull CordovaInterface cordova, int width, int height, int x, int y) throws IOException {
+  public GeckoViewRemoteVideoPlayer(@NonNull CordovaInterface cordova, int width, int height, int x, int y)
+      throws IOException {
     this(cordova.getActivity(), width, height, x, y);
   }
 
   @SuppressLint("WrongThread")
-  public GeckoViewRemoteVideoPlayer(@NonNull AppCompatActivity appCompatActivity, int width, int height, int x, int y) throws IOException {
+  public GeckoViewRemoteVideoPlayer(@NonNull AppCompatActivity appCompatActivity, int width, int height, int x, int y)
+      throws IOException {
 
     super(appCompatActivity);
     this.appCompatActivity = appCompatActivity;
@@ -106,27 +108,24 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     session = new GeckoSession();
 
     GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
-      .allowInsecureConnections(GeckoRuntimeSettings.ALLOW_ALL)
-      .javaScriptEnabled(true)
-      .doubleTapZoomingEnabled(false)
-      .inputAutoZoomEnabled(true)
-      .forceUserScalableEnabled(true)
-      .aboutConfigEnabled(true)
-      .loginAutofillEnabled(true)
-      .webManifest(true)
-      .consoleOutput(true)
-      .remoteDebuggingEnabled(BuildConfig.DEBUG)
-      .debugLogging(BuildConfig.DEBUG);
+        .allowInsecureConnections(GeckoRuntimeSettings.ALLOW_ALL)
+        .javaScriptEnabled(true)
+        .doubleTapZoomingEnabled(false)
+        .inputAutoZoomEnabled(true)
+        .forceUserScalableEnabled(true)
+        .aboutConfigEnabled(true)
+        .loginAutofillEnabled(true)
+        .webManifest(true)
+        .consoleOutput(true)
+        .remoteDebuggingEnabled(BuildConfig.DEBUG)
+        .debugLogging(BuildConfig.DEBUG);
     runtime = GeckoRuntime.create(appCompatActivity, builder.build());
 
     session.open(runtime);
     geckoView.setSession(session);
     session.getSettings().setAllowJavascript(true);
-
-
     // 建立交互
     installExtension();
-
 
     session.setContentDelegate(new GeckoSession.ContentDelegate() {
       @Override
@@ -136,21 +135,19 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
     });
 
-
-
-
-
-
-
-
-
-
-
+    session.setPermissionDelegate(new GeckoSession.PermissionDelegate() {
+      @Nullable
+      @Override
+      public GeckoResult<Integer> onContentPermissionRequest(@NonNull GeckoSession session, @NonNull ContentPermission perm) {
+        return GeckoResult.fromValue(ContentPermission.VALUE_ALLOW);
+      }
+    });
 
     // 将 GeckoView 添加到容器中
     this.addView(geckoView, params);
     // 使用 addContentView 动态将容器添加到 Activity 中
-    appCompatActivity.addContentView(this, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    appCompatActivity.addContentView(this,
+        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
   /**
@@ -160,17 +157,16 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private void installExtension() {
 
     runtime.getWebExtensionController()
-      .ensureBuiltIn(EXTENSION_LOCATION, EXTENSION_ID)
-      .accept(
-        extension -> {
-          Log.i(TAG, "Extension installed: " + extension);
-          appCompatActivity.runOnUiThread(() -> {
-            assert extension != null;
-            extension.setMessageDelegate(mMessagingDelegate, "Android");
-          });
-        },
-        e -> Log.e(TAG, "Error registering WebExtension", e)
-      );
+        .ensureBuiltIn(EXTENSION_LOCATION, EXTENSION_ID)
+        .accept(
+            extension -> {
+              Log.i(TAG, "Extension installed: " + extension);
+              appCompatActivity.runOnUiThread(() -> {
+                assert extension != null;
+                extension.setMessageDelegate(mMessagingDelegate, "browser");
+              });
+            },
+            e -> Log.e(TAG, "Error registering WebExtension", e));
   }
 
   /**
@@ -217,18 +213,18 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     // 加载 HTML 视频内容，不需要监听全屏事件
 
     if (GeckoViewRemoteVideoPlayerHtml != null) {
-      session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
+      session
+          .loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
     } else {
       String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
-        "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
-        "<source src=\"" + url + "\" type=\"video/mp4\">" +
-        " " +
-        "</video></body></html>";
+          "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
+          "<source src=\"" + url + "\" type=\"video/mp4\">" +
+          " " +
+          "</video></body></html>";
       session.loadUri("data:text/html;charset=utf-8," + htmlContent);
     }
 
-
-    //session.loadUri("javascript:pay();");
+    // session.loadUri("javascript:pay();");
   }
 
   private String loadHtmlFromRes(String fileName) {
@@ -255,7 +251,8 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
   public void destroy() {
     try {
-      if (session != null) session.close();
+      if (session != null)
+        session.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -270,18 +267,15 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   public void setFullScreen(boolean fullScreen) {
     // 保存原始的宽、高、X、Y位置
 
-
     if (fullScreen && !isFullScreen) {
       // 进入全屏并切换为横屏
       appCompatActivity.getWindow().setFlags(
-        WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN
-      );
+          WindowManager.LayoutParams.FLAG_FULLSCREEN,
+          WindowManager.LayoutParams.FLAG_FULLSCREEN);
       appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); // 切换到横屏
       geckoView.setLayoutParams(new FrameLayout.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.MATCH_PARENT
-      ));
+          ViewGroup.LayoutParams.MATCH_PARENT,
+          ViewGroup.LayoutParams.MATCH_PARENT));
       isFullScreen = true;
     } else if (!fullScreen && isFullScreen) {
       // 退出全屏并恢复为竖屏
