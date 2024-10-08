@@ -38,6 +38,5 @@
         <source-file src="src/android/messaging/background.js" target-dir="assets/messaging" />   
         <source-file src="src/android/messaging/content.js" target-dir="assets/messaging" />  
         <source-file src="src/android/messaging/manifest.json" target-dir="assets/messaging" />   
-
     </platform>
 </plugin>
