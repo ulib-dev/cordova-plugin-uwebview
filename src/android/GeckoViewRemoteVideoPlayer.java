@@ -3,6 +3,7 @@ package com.udev.uwebview;
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,7 +22,6 @@ import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
-import org.mozilla.geckoview.MediaSession;
 import org.mozilla.geckoview.WebExtension;
 
 import java.io.IOException;
@@ -105,6 +105,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
     // 初始化 GeckoView
     geckoView = new GeckoView(appCompatActivity);
+    geckoView.setBackgroundColor(Color.TRANSPARENT);
     session = new GeckoSession();
 
     GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()

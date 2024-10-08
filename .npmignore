@@ -13,6 +13,7 @@ Thumbs.db
 *.user
 
 node_modules
+node_modules/
 
 
 

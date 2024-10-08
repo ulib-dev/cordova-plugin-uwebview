@@ -85,15 +85,11 @@ public class CordovaGeckoView extends CordovaPlugin {
       // 如果 width 为 0，设置为最大宽度
       if (width == 0) {
         width = FrameLayout.LayoutParams.MATCH_PARENT;
-      } else if (width > deviceWidth) {
-        width = deviceWidth;
       }
 
       // 如果 height 为 0，根据分辨率调整高度
       if (height == 0) {
         height = (int) (width * ((float) deviceHeight / deviceWidth));
-      } else if (width > deviceHeight) {
-        height = deviceHeight;
       }
 
       final int finalWidth = width;
