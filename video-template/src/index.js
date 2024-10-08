@@ -5,10 +5,14 @@ import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 // 模拟发送消息到应用
 function mySendMessageToApp(message) {
   // 这是一个模拟的函数，你可以根据你的实际需求实现与应用程序的通信逻辑
-  console.log("Message sent to app:", message);
-  if (window.JSBridge) {
-    window.JSBridge.postMessage2(message);
-  }
+  // console.log("Message sent to app:", message);
+  // if (window.JSBridge) {
+  //   window.JSBridge.postMessage2(message);
+  // }
+  window.postMessage({
+    type: "FROM_PAGE",
+    data: message,
+  });
 }
 // 初始化 Plyr 播放器
 const player = new Plyr("#player", {
