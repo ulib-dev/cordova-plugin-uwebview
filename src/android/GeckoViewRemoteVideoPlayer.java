@@ -144,11 +144,29 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       }
     });
 
+    session.setProgressDelegate(new GeckoSession.ProgressDelegate() {
+      @Override
+      public void onPageStop(@NonNull GeckoSession session, boolean success) {
+        // 页面加载结束时调用
+      }
+
+      @Override
+      public void onPageStart(@NonNull GeckoSession session, @NonNull String url) {
+        // 拦截自定义 URL Scheme
+        if (url.startsWith("native://")) {
+          // 处理来自 JavaScript 的数据
+          String data = url.substring("native://".length());
+          // 你可以在这里解析数据并处理
+        }
+      }
+
+    });
+
     // 将 GeckoView 添加到容器中
     this.addView(geckoView, params);
     // 使用 addContentView 动态将容器添加到 Activity 中
     appCompatActivity.addContentView(this,
-        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+      new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
   /**
@@ -212,19 +230,20 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
   public void Play(String url) {
     // 加载 HTML 视频内容，不需要监听全屏事件
+    appCompatActivity.runOnUiThread(() -> {
 
-    if (GeckoViewRemoteVideoPlayerHtml != null) {
-      session
+      if (GeckoViewRemoteVideoPlayerHtml != null) {
+        session
           .loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
-    } else {
-      String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
+      } else {
+        String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
           "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
           "<source src=\"" + url + "\" type=\"video/mp4\">" +
           " " +
           "</video></body></html>";
-      session.loadUri("data:text/html;charset=utf-8," + htmlContent);
-    }
-
+        session.loadUri("data:text/html;charset=utf-8," + htmlContent);
+      }
+    });
     // session.loadUri("javascript:pay();");
   }
 

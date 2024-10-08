@@ -9,10 +9,14 @@ function mySendMessageToApp(message) {
   // if (window.JSBridge) {
   //   window.JSBridge.postMessage2(message);
   // }
+  // 当需要通知原生代码时，通过更改 URL 的方式
+
+
   window.postMessage({
     type: "FROM_PAGE",
     data: message,
   });
+  window.location.href = "native://event/" + "123";
 }
 // 初始化 Plyr 播放器
 const player = new Plyr("#player", {
