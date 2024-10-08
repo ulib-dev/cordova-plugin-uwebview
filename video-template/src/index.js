@@ -1,7 +1,7 @@
 import Plyr from "plyr";
-import "../node_modules/plyr/dist/plyr.css";
+import "../../node_modules/plyr/dist/plyr.css";
 // 导入 Font Awesome 的 CSS 文件
-import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+import "../../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 // 模拟发送消息到应用
 function mySendMessageToApp(message) {
   // 这是一个模拟的函数，你可以根据你的实际需求实现与应用程序的通信逻辑
