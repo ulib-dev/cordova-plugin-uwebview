@@ -42,6 +42,7 @@
         <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo" />
         <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo" />
         <source-file src="src/android/res/raw/u_video_player.html" target-dir="res/raw" />  
+           <source-file src="src/android/assets/uvideo/plyr.svg" target-dir="assets/uvideo" />
     </platform>
 </plugin>
  
