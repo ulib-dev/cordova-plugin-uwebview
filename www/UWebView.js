@@ -26,8 +26,14 @@ var UWebView = {
       arg.y || 0,
     ]);
   },
+  closePlayer: function (success, error) {
+    exec(success, error, "UWebView", "closePlayer", []);
+  },
+  destroyVideoPlayer: function (success, error) {
+    exec(success, error, "UWebView", "destroyVideoPlayer", []);
+  },
   destroyRemoteVideo: function (success, error) {
-    exec(success, error, "UWebView", "destroyRemoteVideo", []);
+    exec(success, error, "UWebView", "destroyVideoPlayer", []);
   },
   setRemoteVideoFullScreen: function (full, success, error) {
     exec(success, error, "UWebView", "setRemoteVideoFullScreen", [

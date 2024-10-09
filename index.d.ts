@@ -12,12 +12,13 @@ export declare class UWebView {
     success?: () => void,
     error?: (err: any) => void
   ): void;
-  playRemoteVideo(
+  
+  initVideoPlayer(
     arg: PlayRemoteVideoOptions,
     success?: () => void,
     error?: (err: any) => void
   ): void;
-  initVideoPlayer(
+  playRemoteVideo(
     arg: PlayRemoteVideoOptions,
     success?: () => void,
     error?: (err: any) => void

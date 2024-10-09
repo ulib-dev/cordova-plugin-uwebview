@@ -139,7 +139,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
         return GeckoSession.PromptDelegate.super.onAlertPrompt(session, prompt);
       }
     });
-    geckoView.setVisibility(GeckoViewRemoteVideoPlayer.GONE);
+    geckoView.setVisibility(GeckoViewRemoteVideoPlayer.INVISIBLE);
     // 将 GeckoView 添加到容器中
     this.addView(geckoView, params);
     // 使用 addContentView 动态将容器添加到 Activity 中
@@ -276,6 +276,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   public void Play(String url) {
     // 加载 HTML 视频内容，不需要监听全屏事件
     if (GeckoViewRemoteVideoPlayerHtml != null) {
+      geckoView.setVisibility(GeckoViewRemoteVideoPlayer.VISIBLE);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         //evalJavascript("changeVideoUrl('"+url+"?v"+ LocalDateTime.now().toString()+"')");
       }
@@ -330,6 +331,19 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       e.printStackTrace();
     }
     geckoView = null;
+  }
+  void  resetPlayer(){
+      session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"resource://android/assets/uvideo/blank.mp4\" type=\"video/mp4\"/></video></body></html>");
+  }
+  public void closePlayer() {
+    try {
+      if (session != null){
+        geckoView.setVisibility(GeckoViewRemoteVideoPlayer.INVISIBLE);
+        resetPlayer();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void setFullScreen(boolean fullScreen) {
