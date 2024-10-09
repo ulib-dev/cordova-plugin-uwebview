@@ -17,6 +17,11 @@ export declare class UWebView {
     success?: () => void,
     error?: (err: any) => void
   ): void;
+  initVideo(
+    arg: PlayRemoteVideoOptions,
+    success?: () => void,
+    error?: (err: any) => void
+  ): void;
   destroyRemoteVideo(success?: () => void, error?: (err: any) => void): void;
   setRemoteVideoFullScreen(
     full: boolean,

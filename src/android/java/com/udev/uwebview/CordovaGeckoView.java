@@ -16,6 +16,7 @@ import org.apache.cordova.LOG;
 import org.json.JSONException;
 
 import java.io.IOException;
+
 public class CordovaGeckoView extends CordovaPlugin {
   private static final String TAG = "CordovaGeckoView"; // 日志标签
   public CallbackContext callback = null;
@@ -50,9 +51,13 @@ public class CordovaGeckoView extends CordovaPlugin {
       String url = args.getString(0);
       this.openGeckoViewActivity(context, url);
       return true;
+    } else if (action.equals("initVideo")) {
+      callback = callbackContext;
+      this.playRemoteVideo(true, context, args);
+      return true;
     } else if (action.equals("playRemoteVideo")) {
       callback = callbackContext;
-      this.playRemoteVideo(context, args);
+      this.playRemoteVideo(false, context, args);
       return true;
     } else if (action.equals("destroyRemoteVideo")) {
       callback = callbackContext;
@@ -69,8 +74,7 @@ public class CordovaGeckoView extends CordovaPlugin {
     this.cordova.getActivity().startActivity(intent);
   }
 
-  private void playRemoteVideo(Context context, final CordovaArgs args) {
-
+  private void playRemoteVideo(boolean isInit, Context context, final CordovaArgs args) {
     try {
 
       String url = args.getString(0);
@@ -97,16 +101,16 @@ public class CordovaGeckoView extends CordovaPlugin {
       if (this.remoteVideoPlayer == null) {
         cordova.getActivity().runOnUiThread(() -> {
           try {
-          this.remoteVideoPlayer = new GeckoViewRemoteVideoPlayer(this.cordova, finalWidth, finalHeight, x, y);
+            this.remoteVideoPlayer = new GeckoViewRemoteVideoPlayer(this.cordova, finalWidth, finalHeight, x, y);
           } catch (IOException e) {
             throw new RuntimeException(e);
           }
-          this.remoteVideoPlayer.Play(url);
+          if (!isInit) this.remoteVideoPlayer.Play(url);
         });
       } else {
         cordova.getActivity().runOnUiThread(() -> {
           this.remoteVideoPlayer.updateLayout(finalWidth, finalHeight, x, y);
-          this.remoteVideoPlayer.Play(url);
+          if (!isInit) this.remoteVideoPlayer.Play(url);
         });
       }
       //webView.getView().setBackgroundColor(Color.TRANSPARENT);

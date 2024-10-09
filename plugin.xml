@@ -33,15 +33,15 @@
         <source-file src="src/android/res/layout/u_cordovageckview.xml" target-dir="res/layout" />      
         <source-file src="src/android/res/layout/u_geckoview_remote_video.xml" target-dir="res/layout" />     
         <!-- <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />    -->
-        <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />  
+  
         <source-file src="src/android/assets/messaging/.eslintrc.js" target-dir="assets/messaging" />  
         <source-file src="src/android/assets/messaging/background.js" target-dir="assets/messaging" />   
         <source-file src="src/android/assets/messaging/content.js" target-dir="assets/messaging" />  
         <source-file src="src/android/assets/messaging/manifest.json" target-dir="assets/messaging" />   
 
-        <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo/blank.mp4" />
-        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo/u_video_player.html" />
-        
+        <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo" />
+        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo" />
+        <source-file src="src/android/res/raw/u_video_player.html" target-dir="res/raw" />  
     </platform>
 </plugin>
  

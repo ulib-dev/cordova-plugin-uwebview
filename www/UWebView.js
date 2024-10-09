@@ -6,6 +6,16 @@ var UWebView = {
   loadUrlWithGeckoView: function (url, success, error) {
     exec(success, error, "UWebView", "loadUrlWithGeckoView", [url]);
   },
+  initVideo: function (arg, success, error) {
+    arg = arg || {};
+    exec(success, error, "UWebView", "initVideo", [
+      "",
+      arg.width || 0,
+      arg.height || 200,
+      arg.x || 0,
+      arg.y || 0,
+    ]);
+  },
   playRemoteVideo: function (arg, success, error) {
     arg = arg || {};
     exec(success, error, "UWebView", "playRemoteVideo", [

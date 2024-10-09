@@ -152,6 +152,39 @@ function uPlayer(newId) {
     player.muted = true; // 确保静音
   });
 
+  this.changeVideoUrl = (url) => {
+    mySendMessageToApp({
+      event: "changeVideoUrl",
+      data: url,
+      message:'1'
+    });
+    const video = document.getElementById("player");
+    mySendMessageToApp({
+      event: "changeVideoUrl",
+      data: url,
+      message:'2'
+    });
+    const source = document.getElementById("videoSource");
+    source.src = url;
+    mySendMessageToApp({
+      event: "changeVideoUrl",
+      data: url,
+      message:'3'
+    });
+    video.load(); // 重新加载新源
+    // 添加延迟再播放
+    setTimeout(() => {
+      video.play().catch((error) => {
+        console.error("更改源后自动播放失败1:", error);
+        mySendMessageToApp({
+          event: "changeVideoUrl",
+          data: url,
+          message:error
+        });
+      });
+    }, 500); // 根据需要调整延迟
+  };
+
   // 截图功能：使用 Canvas 对视频进行截图
   this.captureScreenshot = () => {
     const video = document.querySelector("#player");
@@ -180,41 +213,6 @@ function uPlayer(newId) {
     try {
       document.getElementById(newId).remove();
     } catch (error) {}
-  };
-  this.changeVideoUrl = (url) => {
-    const video = document.getElementById("player");
-    const source = document.getElementById("videoSource");
-
-    source.src = url;
-    video.load(); // 重新加载新源
-
-    video.addEventListener("loadeddata", () => {
-      mySendMessageToApp({
-        event: "changeVideoUrlNew",
-        data: url,
-        s: "新视频数据已加载",
-      });
-      console.log("新视频数据已加载");
-      video.play().catch((error) => {
-        mySendMessageToApp({
-            event: "changeVideoUrlNew",
-            data: url,
-            s: "直接播放失败",
-          });
-        console.error("直接播放失败:", error);
-      });
-    });
-
-    video.addEventListener("error", (event) => {
-      mySendMessageToApp({
-        event: "changeVideoUrlNew",
-        data: url,
-        s: "视频加载错误",
-      });
-      console.error("视频加载错误:", event);
-    });
-
-    video.load(); // 重新加载视频
   };
   this.player = player;
   return this;
