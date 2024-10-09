@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin'); // 引入 CopyWebpackPlugin
+const TerserPlugin = require("terser-webpack-plugin"); // 引入 TerserPlugin
 
 module.exports = {
   entry: "./video-template/src/index.js", // JS 文件的入口
@@ -40,6 +41,18 @@ module.exports = {
         ],
     }),
   ],
+  optimization: {
+    minimize: true, // 启用压缩
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true, // 删除 console.log
+          },
+        },
+      }),
+    ],
+  },
   mode: "production", // 生产模式
   // 添加 `webpack` 钩子以在构建后复制 HTML 文件
   

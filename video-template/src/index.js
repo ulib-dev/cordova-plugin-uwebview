@@ -1,5 +1,6 @@
 import Plyr from "plyr";
 import "../../node_modules/plyr/dist/plyr.css";
+ 
 // 导入 Font Awesome 的 CSS 文件
 // import "../../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 // 模拟发送消息到应用
@@ -16,6 +17,7 @@ function uPlayer(newId) {
     hideControls: false, // 设置为 false，控件将不会自动隐藏
     blankVideo: "blank.mp4",
     resetOnEnd: true,
+    // iconUrl: './plyr.svg',
     controls: [
       "play-large", // 大的播放按钮
       "play", // 播放/暂停按钮
