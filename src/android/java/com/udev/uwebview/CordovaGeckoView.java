@@ -51,7 +51,7 @@ public class CordovaGeckoView extends CordovaPlugin {
       String url = args.getString(0);
       this.openGeckoViewActivity(context, url);
       return true;
-    } else if (action.equals("initVideo")) {
+    } else if (action.equals("initVideoPlayer")) {
       callback = callbackContext;
       this.playRemoteVideo(true, context, args);
       return true;
