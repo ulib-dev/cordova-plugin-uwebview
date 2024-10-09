@@ -1,23 +1,21 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 
 module.exports = {
     entry: './video-template/src/index.js', // JS 文件的入口
     output: {
         path: path.resolve(__dirname, 'src/android/assets/uvideo'),
-        filename: 'bundle.js', // 输出的 JS 文件
+        filename: 'bundle.js', // 不需要关心这个文件名，它会被内联
     },
     module: {
         rules: [{
-                test: /\.css$/, // 处理 CSS 文件
+                test: /\.css$/, // 内联 CSS
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)$/, // 处理图片和字体文件
-                type: 'asset/resource',
-                generator: {
-                    filename: 'assets/[hash][ext][query]', // 配置输出的文件路径
-                },
+                test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)$/, // 将图片和字体文件转换为 base64
+                type: 'asset/inline',
             },
         ],
     },
@@ -30,6 +28,7 @@ module.exports = {
                 collapseWhitespace: true, // 压缩 HTML
             },
         }),
+        new HtmlInlineScriptPlugin(), // 将 JS 内联到 HTML 中
     ],
     mode: 'production', // 生产模式
 };

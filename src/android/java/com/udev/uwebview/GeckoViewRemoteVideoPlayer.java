@@ -1,9 +1,12 @@
 package com.udev.uwebview;
 
+import static java.time.LocalTime.now;
+
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,10 +25,12 @@ import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
+import org.mozilla.geckoview.MediaSession;
 import org.mozilla.geckoview.WebExtension;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 
 public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private static final String TAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
@@ -61,7 +66,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     this.appCompatActivity = appCompatActivity;
     GeckoViewRemoteVideoPlayerHtml = loadHtmlFromRes("geckoview_remote_video_player");
     // 设置 GeckoView 容器的布局参数
-    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+    LayoutParams params = new LayoutParams(width, height);
     params.leftMargin = x;
     params.topMargin = y;
 
@@ -84,25 +89,22 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       .aboutConfigEnabled(true)
       .loginAutofillEnabled(true)
       .webManifest(true)
+
       .consoleOutput(true)
       .remoteDebuggingEnabled(BuildConfig.DEBUG)
       .debugLogging(BuildConfig.DEBUG);
     runtime = GeckoRuntime.create(appCompatActivity, builder.build());
     // 建立交互
     installExtension();
-//    if (ActivityCompat.checkSelfPermission(appCompatActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//      ActivityCompat.requestPermissions(appCompatActivity, new String[]{(android.Manifest.permission.READ_EXTERNAL_STORAGE)}, 1);
-//    }
-//    URI uri = (new File(appCompatActivity.getApplication().getPackageResourcePath()).toURI());
-//    String assetsURL = uri + "/assets/";
-
     session.open(runtime);
     geckoView.setSession(session);
     session.getSettings().setAllowJavascript(true);
 
-    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"></body></html>");
-
-
+    //session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"#\" type=\"video/mp4\"/></video></body></html>");
+    //session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", "#"));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      session.loadUri("resource://android/assets/uvideo/u_video_player.html?v="+now().toString());
+    }
     session.setContentDelegate(new GeckoSession.ContentDelegate() {
       @Override
       public void onFullScreen(@NonNull final GeckoSession session, final boolean fullScreen) {
@@ -117,25 +119,26 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       public GeckoResult<Integer> onContentPermissionRequest(@NonNull GeckoSession session, @NonNull ContentPermission perm) {
         return GeckoResult.fromValue(ContentPermission.VALUE_ALLOW);
       }
+      @Override
+      public void onMediaPermissionRequest(@NonNull GeckoSession session, @NonNull String uri, @Nullable MediaSource[] video, @Nullable MediaSource[] audio, @NonNull MediaCallback callback) {
+        GeckoSession.PermissionDelegate.super.onMediaPermissionRequest(session, uri, video, audio, callback);
+      }
+    });
+    session.setMediaSessionDelegate(new MediaSession.Delegate() {
+      @Override
+      public void onPlay(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
+        MediaSession.Delegate.super.onPlay(session, mediaSession);
+      }
+    });
+    session.setPromptDelegate(new GeckoSession.PromptDelegate() {
+      @Nullable
+      @Override
+      public GeckoResult<PromptResponse> onAlertPrompt(@NonNull GeckoSession session, @NonNull AlertPrompt prompt) {
+        javacriptCallback(prompt);
+        return GeckoSession.PromptDelegate.super.onAlertPrompt(session, prompt);
+      }
     });
 
-    session.setProgressDelegate(new GeckoSession.ProgressDelegate() {
-      @Override
-      public void onPageStop(@NonNull GeckoSession session, boolean success) {
-        // 页面加载结束时调用
-      }
-
-      @Override
-      public void onPageStart(@NonNull GeckoSession session, @NonNull String url) {
-        // 拦截自定义 URL Scheme
-        if (url.startsWith("native://")) {
-          // 处理来自 JavaScript 的数据
-          String data = url.substring("native://".length());
-          // 你可以在这里解析数据并处理
-        }
-      }
-
-    });
 
     // 将 GeckoView 添加到容器中
     this.addView(geckoView, params);
@@ -273,8 +276,12 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   public void Play(String url) {
     // 加载 HTML 视频内容，不需要监听全屏事件
     if (GeckoViewRemoteVideoPlayerHtml != null) {
-      session
-        .loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        evalJavascript("changeVideoUrl('"+url+"?v"+ LocalDateTime.now().toString()+"')");
+      }
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url+"?v"+ LocalDateTime.now().toString()));
+      }
     } else {
       String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
         "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
@@ -359,19 +366,33 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     }
   }
 
-  public void evaluateJavascript(String javascriptString) {
+  public boolean javacriptCallback(@NonNull GeckoSession.PromptDelegate.AlertPrompt prompt) {
     try {
-      long id = System.currentTimeMillis();
-      Log.e("evalJavascript:id:", id + "");
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("action", "evalJavascript");
-      jsonObject.put("data", javascriptString);
-      jsonObject.put("id", id);
-      Log.e("evalJavascript:", jsonObject.toString());
-      mPort.postMessage(jsonObject);
+      JSONObject jsonObject = new JSONObject(prompt.message);
+      boolean isUVideo="1".equals(jsonObject.getString("_uvideo") );
+      if (isUVideo) {
+        String event = jsonObject.getString("event");
+        switch (event) {
+          case "captureScreenshot":
+            String dataURL = jsonObject.getString("dataURL");
+            break;
+          case "changeVideoUrl":
+            String data = jsonObject.getString("data");
+            break;
+        }
+        return true;
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
+    return false;
+  }
 
+  public void evalJavascript(String javascriptString) {
+    try {
+      session.loadUri("javascript:{window.uvideoPlayer." + javascriptString + "}");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

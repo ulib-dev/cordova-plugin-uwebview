@@ -38,6 +38,10 @@
         <source-file src="src/android/assets/messaging/background.js" target-dir="assets/messaging" />   
         <source-file src="src/android/assets/messaging/content.js" target-dir="assets/messaging" />  
         <source-file src="src/android/assets/messaging/manifest.json" target-dir="assets/messaging" />   
+
+        <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo/blank.mp4" />
+        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo/u_video_player.html" />
+        
     </platform>
 </plugin>
  

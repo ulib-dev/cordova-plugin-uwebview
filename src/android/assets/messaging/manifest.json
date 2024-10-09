@@ -5,14 +5,13 @@
     "version": "3.0",
     "browser_specific_settings": {
       "gecko": {
-        "strict_min_version": "65.0",
         "id": "messaging@example.com"
       }
     },
     "content_scripts": [
       {
         "matches": [
-          "<all_urls>"
+          "<all_urls>","*"
         ],
         "js": [
           "content.js"
@@ -32,7 +31,7 @@
       "webNavigation",
       "geckoview",
       "tabs",
-      "<all_urls>"
+      "<all_urls>","*"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
   }

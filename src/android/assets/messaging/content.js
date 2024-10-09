@@ -1,4 +1,6 @@
 console.log(`content:start`);
+const port = (typeof browser !== 'undefined' && browser.runtime.connectNative) ? browser.runtime.connectNative("browser") : null;
+
 let JSBridge = {
     postMessage: function(message) {
         browser.runtime.sendMessage({
@@ -37,14 +39,7 @@ browser.runtime.onMessage.addListener((data, sender) => {
     }
 }); // 发送消息到原生应用
 
-
 window.addEventListener("message", function(event) {
-    // We only accept messages from ourselves
-    if (event.source != window)
-        return;
-
-    if (event.data.type && (event.data.type == "FROM_PAGE")) {
-        console.log("Content script received message: " + event.data.text);
-        JSBridge.postMessage2(event.data.data);
-    }
+ if((typeof browser !== 'undefined' && browser.runtime.connectNative)){
+          browser.runtime.sendNativeMessage("browser", event);}
 });

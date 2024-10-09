@@ -47,3 +47,9 @@ if (typeof browser !== 'undefined') {
         return Promise.resolve('done');
     });
 }
+
+
+
+window.addEventListener("message", function(event) {
+   sendMessageToTab(event.data.data);
+});
