@@ -31,45 +31,12 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private static final String TAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
   private static final String EXTENSION_LOCATION = "resource://android/assets/messaging/";
   private static final String EXTENSION_ID = "messaging@example.com";
+  // If you make changes to the extension you need to update this
+  private static final String EXTENSION_VERSION = "1.0";
   private static WebExtension.Port mPort;
   private static String GeckoViewRemoteVideoPlayerHtml = "";
-  private final WebExtension.PortDelegate mPortDelegate = new WebExtension.PortDelegate() {
-    @Override
-    public void onPortMessage(final @NonNull Object message,
-        final @NonNull WebExtension.Port port) {
-      Log.e("MessageDelegate", "from extension: " + message);
-      try {
 
-        JSONObject jsonObject = (JSONObject) message;
-        String method = jsonObject.getString("event");
-        if (method.contains("captureScreenshot")) {
-          JSONObject request = new JSONObject();
-          String dataURL = request.getString("dataURL");
-          // request.put("method", "androidView('hasCamera','0')");
-          // mPort.postMessage(request);
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
 
-    @Override
-    public void onDisconnect(final @NonNull WebExtension.Port port) {
-      Log.e("MessageDelegate:", "onDisconnect");
-      if (port == mPort) {
-        mPort = null;
-      }
-    }
-  };
-  private final WebExtension.MessageDelegate mMessagingDelegate = new WebExtension.MessageDelegate() {
-    @Nullable
-    @Override
-    public void onConnect(@NonNull WebExtension.Port port) {
-      Log.e("MessageDelegate", "onConnect");
-      mPort = port;
-      mPort.setDelegate(mPortDelegate);
-    }
-  };
   GeckoSession session;
   AppCompatActivity appCompatActivity;
   int originalWidth = 0;
@@ -82,13 +49,13 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private boolean isFullScreen = false;
 
   public GeckoViewRemoteVideoPlayer(@NonNull CordovaInterface cordova, int width, int height, int x, int y)
-      throws IOException {
+    throws IOException {
     this(cordova.getActivity(), width, height, x, y);
   }
 
   @SuppressLint("WrongThread")
   public GeckoViewRemoteVideoPlayer(@NonNull AppCompatActivity appCompatActivity, int width, int height, int x, int y)
-      throws IOException {
+    throws IOException {
 
     super(appCompatActivity);
     this.appCompatActivity = appCompatActivity;
@@ -109,24 +76,32 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     session = new GeckoSession();
 
     GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
-        .allowInsecureConnections(GeckoRuntimeSettings.ALLOW_ALL)
-        .javaScriptEnabled(true)
-        .doubleTapZoomingEnabled(false)
-        .inputAutoZoomEnabled(true)
-        .forceUserScalableEnabled(true)
-        .aboutConfigEnabled(true)
-        .loginAutofillEnabled(true)
-        .webManifest(true)
-        .consoleOutput(true)
-        .remoteDebuggingEnabled(BuildConfig.DEBUG)
-        .debugLogging(BuildConfig.DEBUG);
+      .allowInsecureConnections(GeckoRuntimeSettings.ALLOW_ALL)
+      .javaScriptEnabled(true)
+      .doubleTapZoomingEnabled(false)
+      .inputAutoZoomEnabled(true)
+      .forceUserScalableEnabled(true)
+      .aboutConfigEnabled(true)
+      .loginAutofillEnabled(true)
+      .webManifest(true)
+      .consoleOutput(true)
+      .remoteDebuggingEnabled(BuildConfig.DEBUG)
+      .debugLogging(BuildConfig.DEBUG);
     runtime = GeckoRuntime.create(appCompatActivity, builder.build());
+    // 建立交互
+    installExtension();
+//    if (ActivityCompat.checkSelfPermission(appCompatActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//      ActivityCompat.requestPermissions(appCompatActivity, new String[]{(android.Manifest.permission.READ_EXTERNAL_STORAGE)}, 1);
+//    }
+//    URI uri = (new File(appCompatActivity.getApplication().getPackageResourcePath()).toURI());
+//    String assetsURL = uri + "/assets/";
 
     session.open(runtime);
     geckoView.setSession(session);
     session.getSettings().setAllowJavascript(true);
-    // 建立交互
-    installExtension();
+
+    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"></body></html>");
+
 
     session.setContentDelegate(new GeckoSession.ContentDelegate() {
       @Override
@@ -174,18 +149,85 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
    */
   @SuppressLint("LongLogTag")
   private void installExtension() {
-
     runtime.getWebExtensionController()
-        .ensureBuiltIn(EXTENSION_LOCATION, EXTENSION_ID)
-        .accept(
-            extension -> {
-              Log.i(TAG, "Extension installed: " + extension);
-              appCompatActivity.runOnUiThread(() -> {
-                assert extension != null;
-                extension.setMessageDelegate(mMessagingDelegate, "browser");
-              });
-            },
-            e -> Log.e(TAG, "Error registering WebExtension", e));
+      .ensureBuiltIn(EXTENSION_LOCATION, EXTENSION_ID)
+      .accept(
+        extension -> {
+          Log.i(TAG, "Extension installed: " + extension);
+          assert extension != null;
+          appCompatActivity.runOnUiThread(() -> {
+            session
+              .getWebExtensionController()
+              .setMessageDelegate(extension, new WebExtension.MessageDelegate() {
+                @Nullable
+                @Override
+                public GeckoResult<Object> onMessage(
+                  final @NonNull String nativeApp,
+                  final @NonNull Object message,
+                  final @NonNull WebExtension.MessageSender sender) {
+                  if (message instanceof JSONObject) {
+                    JSONObject json = (JSONObject) message;
+                    try {
+                      if (json.has("type") && "WPAManifest".equals(json.getString("type"))) {
+                        JSONObject manifest = json.getJSONObject("manifest");
+                        Log.d("MessageDelegate", "Found WPA manifest: " + manifest);
+                      }
+                    } catch (JSONException ex) {
+                      Log.e("MessageDelegate", "Invalid manifest", ex);
+                    }
+                  }
+                  return null;
+                }
+              }, "browser");
+
+            extension.setMessageDelegate(new WebExtension.MessageDelegate() {
+              @Nullable
+              @Override
+              public void onConnect(@NonNull WebExtension.Port port) {
+                Log.e("MessageDelegate", "onConnect");
+                mPort = port;
+                mPort.setDelegate(new WebExtension.PortDelegate() {
+                  @Override
+                  public void onPortMessage(final @NonNull Object message,
+                                            final @NonNull WebExtension.Port port) {
+                    Log.e("MessageDelegate", "from extension: " + message);
+                    try {
+
+                      JSONObject jsonObject = (JSONObject) message;
+                      String method = jsonObject.getString("event");
+                      if (method.contains("captureScreenshot")) {
+                        JSONObject request = new JSONObject();
+                        String dataURL = request.getString("dataURL");
+                        // request.put("method", "androidView('hasCamera','0')");
+                        // mPort.postMessage(request);
+                      }
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+                  }
+
+                  @Override
+                  public void onDisconnect(final @NonNull WebExtension.Port port) {
+                    Log.e("MessageDelegate:", "onDisconnect");
+                    if (port == mPort) {
+                      mPort = null;
+                    }
+                  }
+                });
+              }
+
+              @Nullable
+              @Override
+              public GeckoResult<Object> onMessage(@NonNull String nativeApp, @NonNull Object message, @NonNull WebExtension.MessageSender sender) {
+                if (message instanceof JSONObject) {
+                  // Do something with message
+                }
+                return null;
+              }
+            }, "browser");
+          });
+        },
+        e -> Log.e(TAG, "Error registering WebExtension", e));
   }
 
   /**
@@ -230,20 +272,18 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
   public void Play(String url) {
     // 加载 HTML 视频内容，不需要监听全屏事件
-    appCompatActivity.runOnUiThread(() -> {
+    if (GeckoViewRemoteVideoPlayerHtml != null) {
+      session
+        .loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
+    } else {
+      String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
+        "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
+        "<source src=\"" + url + "\" type=\"video/mp4\">" +
+        " " +
+        "</video></body></html>";
+      session.loadUri("data:text/html;charset=utf-8," + htmlContent);
 
-      if (GeckoViewRemoteVideoPlayerHtml != null) {
-        session
-          .loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
-      } else {
-        String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
-          "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
-          "<source src=\"" + url + "\" type=\"video/mp4\">" +
-          " " +
-          "</video></body></html>";
-        session.loadUri("data:text/html;charset=utf-8," + htmlContent);
-      }
-    });
+    }
     // session.loadUri("javascript:pay();");
   }
 
@@ -290,12 +330,12 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     if (fullScreen && !isFullScreen) {
       // 进入全屏并切换为横屏
       appCompatActivity.getWindow().setFlags(
-          WindowManager.LayoutParams.FLAG_FULLSCREEN,
-          WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN);
       appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE); // 切换到横屏
       geckoView.setLayoutParams(new FrameLayout.LayoutParams(
-          ViewGroup.LayoutParams.MATCH_PARENT,
-          ViewGroup.LayoutParams.MATCH_PARENT));
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
       isFullScreen = true;
     } else if (!fullScreen && isFullScreen) {
       // 退出全屏并恢复为竖屏

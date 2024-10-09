@@ -5,7 +5,7 @@ const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 module.exports = {
     entry: './video-template/src/index.js', // JS 文件的入口
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'src/android/res/raw'),
         filename: 'bundle.js', // 不需要关心这个文件名，它会被内联
     },
     module: {

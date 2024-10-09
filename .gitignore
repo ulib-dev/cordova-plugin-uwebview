@@ -4,3 +4,5 @@ video-template/node_modules
 video-template/node_modules/*
 .vscode/settings.json
 node_modules/
+/pnpm-lock.yaml
+/package-lock.json
