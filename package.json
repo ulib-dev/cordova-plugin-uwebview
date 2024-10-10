@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "description": "Cordova UWebView Plugin",
 
     "types": "./index.d.ts",
@@ -10,7 +10,7 @@
             "android"
         ]
     },
-    "repository":"https://github.com/ulib-dev/cordova-plugin-uwebview",
+    "repository": "https://github.com/ulib-dev/cordova-plugin-uwebview",
     "bugs": "https://github.com/ulib-dev/cordova-plugin-uwebview/issues",
     "keywords": [
         "cordova",

@@ -3,11 +3,11 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-uwebview"
-    version="2.0.5">
+    version="2.0.6">
     <name>UWebView</name>    
     <author>u.lib</author>
     <repo>https://github.com/ulib-dev/cordova-plugin-uwebview</repo>
-    <issue>https://github.com/ulib-dev/cordova-plugin-uwebview</issues</issue>
+    <issue>https://github.com/ulib-dev/cordova-plugin-uwebview</issue>
     <engines>
             <engine name="cordova" version=">=3.0.0" />
     </engines>
