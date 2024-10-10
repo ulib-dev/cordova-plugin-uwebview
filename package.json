@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "Cordova UWebView Plugin",
     "main": "src/uwebview.js",
     "types": "./index.d.ts",
@@ -19,7 +19,7 @@
         "url": "https://github.com/ulib-dev/cordova-plugin-uwebview"
     },
     "bugs": {
-        "url": "https://issues.apache.org/jira/browse/CB"
+        "url": "https://github.com/ulib-dev/cordova-plugin-uwebview/issues"
     },
     "keywords": [
         "cordova",
