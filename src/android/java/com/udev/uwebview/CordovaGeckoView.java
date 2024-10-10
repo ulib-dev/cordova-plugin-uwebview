@@ -59,13 +59,11 @@ public class CordovaGeckoView extends CordovaPlugin {
       callback = callbackContext;
       this.playRemoteVideo(false, context, args);
       return true;
-    }
-    else if (action.equals("closePlayer")) {
+    } else if (action.equals("closePlayer")) {
       callback = callbackContext;
       this.closePlayer();
       return true;
-    }
-    else if (action.equals("destroyRemoteVideo")||action.equals("destroyVideoPlayer")) {
+    } else if (action.equals("destroyRemoteVideo") || action.equals("destroyVideoPlayer")) {
       callback = callbackContext;
       this.destroyVideoPlayer();
       return true;
@@ -139,10 +137,13 @@ public class CordovaGeckoView extends CordovaPlugin {
     }
     return true;
   }
+
   private boolean closePlayer() {
     if (this.remoteVideoPlayer != null) {
       this.remoteVideoPlayer.closePlayer();
     }
     return true;
   }
+
+
 }

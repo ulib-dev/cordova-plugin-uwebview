@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,16 +24,15 @@ import org.mozilla.geckoview.GeckoRuntime;
 import org.mozilla.geckoview.GeckoRuntimeSettings;
 import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
-import org.mozilla.geckoview.MediaSession;
 import org.mozilla.geckoview.WebExtension;
-import org.mozilla.geckoview.WebRequestError;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class GeckoViewRemoteVideoPlayer extends FrameLayout {
-  static final String blankVideoFile = "resource://android/assets/uvideo/blank.mp4";
+  static final String blankVideoFile ="";// "resource://android/assets/uvideo/u_video_blank.mp4";
   static final String u_video_playerFile = "resource://android/assets/uvideo/u_video_player.html";
   //static final String u_video_playerFile = "file:///android_asset/uvideo/u_video_player.html";
   private static final String TAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
@@ -43,6 +43,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   private static final String EXTENSION_VERSION = "1.0";
   private static WebExtension.Port mPort;
   private static String GeckoViewRemoteVideoPlayerHtml = "";
+  private static String u_video_blankBase64 = "";
   GeckoSession session;
   AppCompatActivity appCompatActivity;
   int originalWidth = 0;
@@ -65,7 +66,9 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
 
     super(appCompatActivity);
     this.appCompatActivity = appCompatActivity;
-    GeckoViewRemoteVideoPlayerHtml = loadHtmlFromRes("u_video_player");
+    GeckoViewRemoteVideoPlayerHtml = getStringFromResRaw("u_video_player");
+    //u_video_blankBase64 = getBase64StringFromResRaw("u_video_blank");
+
     // 设置 GeckoView 容器的布局参数
     LayoutParams params = new LayoutParams(width, height);
     params.leftMargin = x;
@@ -298,7 +301,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     // session.loadUri("javascript:pay();");
   }
 
-  private String loadHtmlFromRes(String fileName) {
+  private String getStringFromResRaw(String fileName) {
     try {
       // 动态获取资源 ID
       Resources res = getResources();
@@ -319,6 +322,35 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       return null;
     }
   }
+
+  public String getBase64StringFromResRaw(String fileName) {
+    try {
+      Resources res = getResources();
+      int resourceId = res.getIdentifier(fileName, "raw", this.appCompatActivity.getPackageName());
+      if (resourceId != 0) { //
+        InputStream inputStream = getResources().openRawResource(resourceId);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        // 将输入流读取到字节数组输出流中
+        while ((length = inputStream.read(buffer)) != -1) {
+          byteArrayOutputStream.write(buffer, 0, length);
+        }
+        // 关闭流
+        inputStream.close();
+        // 将字节数组转换为 Base64 字符串
+        byte[] videoBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(videoBytes, Base64.NO_WRAP);
+      } else {
+        Log.e("loadHtmlFromRes", "File not found: " + fileName);
+        return null;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
 
   public void destroy() {
     try {
