@@ -1,48 +1,56 @@
-<?xml version='1.0' encoding='utf-8'?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    xmlns:rim="http://www.blackberry.com/ns/widgets"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    id="cordova-plugin-uwebview"
-    version="2.0.0">
-    <name>UWebView</name>    
-    <engines>
-            <engine name="cordova" version=">=3.0.0" />
-    </engines>
-    <js-module src="www/uwebview.js" name="uwebview">
-        <clobbers target="window.UWebView" />
-    </js-module>
-    <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="UWebView">
-                <param name="android-package" value="com.udev.uwebview.CordovaGeckoView" />
-                <param name="onload" value="true" />
-            </feature>
-        </config-file>
-        <framework custom="true" src="src/android/build-extras.gradle" type="gradleReference"/>
-        <config-file parent="/manifest" target="AndroidManifest.xml">
-            <uses-permission android:name="android.permission.INTERNET" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-        </config-file>
- 
-        <config-file parent="/*" target="AndroidManifest.xml"></config-file>
-        <source-file src="src/android/java/com/udev/uwebview/CordovaGeckoView.java" target-dir="src/com/udev/uwebview" />
-        <source-file src="src/android/java/com/udev/uwebview/GeckoViewActivity.java" target-dir="src/com/udev/uwebview" />
-        <source-file src="src/android/java/com/udev/uwebview/GeckoViewRemoteVideoPlayer.java" target-dir="src/com/udev/uwebview" />        
-        <source-file src="src/android/res/layout/u_geckoview_layout.xml" target-dir="res/layout" />
-        <source-file src="src/android/res/layout/u_cordovageckview.xml" target-dir="res/layout" />      
-        <source-file src="src/android/res/layout/u_geckoview_remote_video.xml" target-dir="res/layout" />     
-        <!-- <source-file src="src/android/res/raw/geckoview_remote_video_player.html" target-dir="res/raw" />    -->
-  
-        <source-file src="src/android/assets/messaging/.eslintrc.js" target-dir="assets/messaging" />  
-        <source-file src="src/android/assets/messaging/background.js" target-dir="assets/messaging" />   
-        <source-file src="src/android/assets/messaging/content.js" target-dir="assets/messaging" />  
-        <source-file src="src/android/assets/messaging/manifest.json" target-dir="assets/messaging" />   
-
-        <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo" />
-        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo" />
-        <source-file src="src/android/res/raw/u_video_player.html" target-dir="res/raw" />  
-           <source-file src="src/android/assets/uvideo/plyr.svg" target-dir="assets/uvideo" />
-    </platform>
-</plugin>
- 
+{
+    "name": "cordova-plugin-uwebview",
+    "version": "2.0.2",
+    "description": "Cordova UWebView Plugin",
+    "main": "src/uwebview.js",
+    "types": "./index.d.ts",
+    "cordova": {
+        "id": "cordova-plugin-uwebview",
+        "platforms": [
+            "android",
+            "ios",
+            "wp7",
+            "wp8",
+            "windows"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ulib-dev/cordova-plugin-uwebview"
+    },
+    "bugs": {
+        "url": "https://issues.apache.org/jira/browse/CB"
+    },
+    "keywords": [
+        "cordova",
+        "uwebview"
+    ],
+    "scripts": {
+        "test": "npm run jshint",
+        "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
+        "start": "webpack serve --open --mode development",
+        "build": "webpack --mode production"
+    },
+    "dependencies": {},
+    "engines": {
+        "cordovaDependencies": {}
+    },
+    "author": "Apache Software Foundation",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "@fortawesome/fontawesome-free": "^6.6.0",
+        "copy-webpack-plugin": "^12.0.2",
+        "css-loader": "^7.1.2",
+        "file-loader": "^6.2.0",
+        "html-inline-css-webpack-plugin": "^1.11.2",
+        "html-inline-script-webpack-plugin": "^3.2.1",
+        "html-webpack-plugin": "^5.6.0",
+        "jshint": "^2.6.0",
+        "plyr": "^3.7.8",
+        "style-loader": "^4.0.0",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.95.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.1.0"
+    }
+}
