@@ -278,15 +278,16 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   }
 
   public void Play(String url) {
+    geckoView.setVisibility(GeckoViewRemoteVideoPlayer.VISIBLE);
     // 加载 HTML 视频内容，不需要监听全屏事件
     if (GeckoViewRemoteVideoPlayerHtml != null) {
-      geckoView.setVisibility(GeckoViewRemoteVideoPlayer.VISIBLE);
       if (url.indexOf('?') != -1) {
         url += "&v" + System.currentTimeMillis();
       } else {
         url += "?v" + System.currentTimeMillis();
       }
       //evalJavascript("changeVideoUrl('" + url + "?v" + System.currentTimeMillis() + "')");
+      //session.loadUri(url);
       session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
     } else {
       String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
@@ -294,9 +295,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
         "<source src=\"" + url + "\" type=\"video/mp4\">" +
         " " +
         "</video></body></html>";
-      geckoView.setVisibility(GeckoViewRemoteVideoPlayer.VISIBLE);
       session.loadUri("data:text/html;charset=utf-8," + htmlContent);
-
     }
     // session.loadUri("javascript:pay();");
   }
