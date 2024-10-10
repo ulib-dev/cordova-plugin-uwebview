@@ -1,26 +1,17 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Cordova UWebView Plugin",
-    "main": "src/uwebview.js",
+
     "types": "./index.d.ts",
     "cordova": {
         "id": "cordova-plugin-uwebview",
         "platforms": [
-            "android",
-            "ios",
-            "wp7",
-            "wp8",
-            "windows"
+            "android"
         ]
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ulib-dev/cordova-plugin-uwebview"
-    },
-    "bugs": {
-        "url": "https://github.com/ulib-dev/cordova-plugin-uwebview/issues"
-    },
+    "repository":"https://github.com/ulib-dev/cordova-plugin-uwebview",
+    "bugs": "https://github.com/ulib-dev/cordova-plugin-uwebview/issues",
     "keywords": [
         "cordova",
         "uwebview"
