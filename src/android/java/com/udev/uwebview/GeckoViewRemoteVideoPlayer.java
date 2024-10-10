@@ -1,12 +1,9 @@
 package com.udev.uwebview;
 
-import static java.time.LocalTime.now;
-
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.apache.cordova.CordovaInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.geckoview.AllowOrDeny;
 import org.mozilla.geckoview.BuildConfig;
 import org.mozilla.geckoview.GeckoResult;
 import org.mozilla.geckoview.GeckoRuntime;
@@ -27,21 +25,24 @@ import org.mozilla.geckoview.GeckoSession;
 import org.mozilla.geckoview.GeckoView;
 import org.mozilla.geckoview.MediaSession;
 import org.mozilla.geckoview.WebExtension;
+import org.mozilla.geckoview.WebRequestError;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
 
 public class GeckoViewRemoteVideoPlayer extends FrameLayout {
+  static final String blankVideoFile = "resource://android/assets/uvideo/blank.mp4";
+  static final String u_video_playerFile = "resource://android/assets/uvideo/u_video_player.html";
+  //static final String u_video_playerFile = "file:///android_asset/uvideo/u_video_player.html";
   private static final String TAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
+  private static final String LOGTAG = "GeckoViewRemoteVideoPlayer"; // 日志标签
   private static final String EXTENSION_LOCATION = "resource://android/assets/messaging/";
   private static final String EXTENSION_ID = "messaging@example.com";
   // If you make changes to the extension you need to update this
   private static final String EXTENSION_VERSION = "1.0";
   private static WebExtension.Port mPort;
   private static String GeckoViewRemoteVideoPlayerHtml = "";
-
-
   GeckoSession session;
   AppCompatActivity appCompatActivity;
   int originalWidth = 0;
@@ -81,36 +82,38 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     session = new GeckoSession();
 
     GeckoRuntimeSettings.Builder builder = new GeckoRuntimeSettings.Builder()
+
+
       .allowInsecureConnections(GeckoRuntimeSettings.ALLOW_ALL)
       .javaScriptEnabled(true)
       .doubleTapZoomingEnabled(false)
-      .inputAutoZoomEnabled(true)
-      .forceUserScalableEnabled(true)
+      .inputAutoZoomEnabled(false)
+      .forceUserScalableEnabled(false)
       .aboutConfigEnabled(true)
       .loginAutofillEnabled(true)
       .webManifest(true)
-
       .consoleOutput(true)
+
       .remoteDebuggingEnabled(BuildConfig.DEBUG)
       .debugLogging(BuildConfig.DEBUG);
     runtime = GeckoRuntime.create(appCompatActivity, builder.build());
     // 建立交互
-    installExtension();
+    //installExtension();
     session.open(runtime);
     geckoView.setSession(session);
     session.getSettings().setAllowJavascript(true);
+    //session.getSettings().setUserAgentMode(GeckoSessionSettings.USER_AGENT_MODE_MOBILE);
+    //session.getSettings().setViewportMode(GeckoSessionSettings.VIEWPORT_MODE_MOBILE);
 
-    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"resource://android/assets/uvideo/blank.mp4\" type=\"video/mp4\"/></video></body></html>");
-    //session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", "#"));
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      session.loadUri("resource://android/assets/uvideo/u_video_player.html?v=" + now().toString());
-    }
+    //session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\""+blankVideoFile+"\" type=\"video/mp4\"/></video></body></html>");
+    session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", blankVideoFile));
+    //session.loadUri(u_video_playerFile + "?v=" + System.currentTimeMillis());
+
     session.setContentDelegate(new GeckoSession.ContentDelegate() {
       @Override
       public void onFullScreen(@NonNull final GeckoSession session, final boolean fullScreen) {
         setFullScreen(fullScreen);
       }
-
     });
 
     session.setPermissionDelegate(new GeckoSession.PermissionDelegate() {
@@ -119,24 +122,22 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
       public GeckoResult<Integer> onContentPermissionRequest(@NonNull GeckoSession session, @NonNull ContentPermission perm) {
         return GeckoResult.fromValue(ContentPermission.VALUE_ALLOW);
       }
+    });
 
-      @Override
-      public void onMediaPermissionRequest(@NonNull GeckoSession session, @NonNull String uri, @Nullable MediaSource[] video, @Nullable MediaSource[] audio, @NonNull MediaCallback callback) {
-        GeckoSession.PermissionDelegate.super.onMediaPermissionRequest(session, uri, video, audio, callback);
-      }
-    });
-    session.setMediaSessionDelegate(new MediaSession.Delegate() {
-      @Override
-      public void onPlay(@NonNull GeckoSession session, @NonNull MediaSession mediaSession) {
-        MediaSession.Delegate.super.onPlay(session, mediaSession);
-      }
-    });
     session.setPromptDelegate(new GeckoSession.PromptDelegate() {
       @Nullable
       @Override
       public GeckoResult<PromptResponse> onAlertPrompt(@NonNull GeckoSession session, @NonNull AlertPrompt prompt) {
         javacriptCallback(prompt);
         return GeckoSession.PromptDelegate.super.onAlertPrompt(session, prompt);
+      }
+    });
+
+    session.setNavigationDelegate(new GeckoSession.NavigationDelegate() {
+      @Nullable
+      @Override
+      public GeckoResult<AllowOrDeny> onLoadRequest(@NonNull GeckoSession session, @NonNull LoadRequest request) {
+        return GeckoResult.fromValue(AllowOrDeny.ALLOW);
       }
     });
     geckoView.setVisibility(GeckoViewRemoteVideoPlayer.INVISIBLE);
@@ -277,12 +278,13 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     // 加载 HTML 视频内容，不需要监听全屏事件
     if (GeckoViewRemoteVideoPlayerHtml != null) {
       geckoView.setVisibility(GeckoViewRemoteVideoPlayer.VISIBLE);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        //evalJavascript("changeVideoUrl('"+url+"?v"+ LocalDateTime.now().toString()+"')");
+      if (url.indexOf('?') != -1) {
+        url += "&v" + System.currentTimeMillis();
+      } else {
+        url += "?v" + System.currentTimeMillis();
       }
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url + "?v" + LocalDateTime.now().toString()));
-      }
+      //evalJavascript("changeVideoUrl('" + url + "?v" + System.currentTimeMillis() + "')");
+      session.loadUri("data:text/html;charset=utf-8," + GeckoViewRemoteVideoPlayerHtml.replace("UVIEW{@##@}UVIEW", url));
     } else {
       String htmlContent = "<html><body style=\"background-color: black; margin: 0;\">" +
         "<video id=\"myVideo\" style=\"width: 100%; height: 100vh; object-fit: cover;\"  autoplay muted>" +
@@ -307,7 +309,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
         byte[] buffer = new byte[inputStream.available()];
         inputStream.read(buffer);
         inputStream.close();
-        return new String(buffer, "UTF-8");
+        return new String(buffer, StandardCharsets.UTF_8);
       } else {
         Log.e("loadHtmlFromRes", "File not found: " + fileName);
         return null;
@@ -332,12 +334,14 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     }
     geckoView = null;
   }
-  void  resetPlayer(){
-      session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"resource://android/assets/uvideo/blank.mp4\" type=\"video/mp4\"/></video></body></html>");
+
+  void resetPlayer() {
+    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"" + blankVideoFile + "\" type=\"video/mp4\"/></video></body></html>");
   }
+
   public void closePlayer() {
     try {
-      if (session != null){
+      if (session != null) {
         geckoView.setVisibility(GeckoViewRemoteVideoPlayer.INVISIBLE);
         resetPlayer();
       }
@@ -381,6 +385,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
     }
   }
 
+  @SuppressLint("LongLogTag")
   public boolean javacriptCallback(@NonNull GeckoSession.PromptDelegate.AlertPrompt prompt) {
     try {
       JSONObject jsonObject = new JSONObject(prompt.message);
@@ -393,6 +398,10 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
             break;
           case "changeVideoUrl":
             String data = jsonObject.getString("data");
+            break;
+          case "changeVideoUrlNew":
+            String s = jsonObject.getString("s");
+            Log.d(TAG, s);
             break;
         }
         return true;

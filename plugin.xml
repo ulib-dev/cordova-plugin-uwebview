@@ -3,7 +3,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-uwebview"
-    version="2.0.6">
+    version="2.0.7">
     <name>UWebView</name>    
     <author>u.lib</author>
     <repo>https://github.com/ulib-dev/cordova-plugin-uwebview</repo>
@@ -26,6 +26,7 @@
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>          
         </config-file>
  
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
@@ -44,7 +45,7 @@
 
         <source-file src="src/android/assets/uvideo/blank.mp4" target-dir="assets/uvideo" />
         <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo" />
-        <source-file src="src/android/res/raw/u_video_player.html" target-dir="res/raw" />  
+        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="res/raw" />  
     </platform>
 </plugin>
  

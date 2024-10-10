@@ -1,13 +1,18 @@
-const path = require("path"); 
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin'); // 引入 CopyWebpackPlugin
+const CopyWebpackPlugin = require("copy-webpack-plugin"); // 引入 CopyWebpackPlugin
 
 module.exports = {
   entry: "./video-template/src/index.js", // JS 文件的入口
   output: {
     path: path.resolve(__dirname, "src/android/assets/uvideo"),
     filename: "bundle.js", // 不需要关心这个文件名，它会被内联
+  },
+  stats: {
+    colors: true,
+    reasons: true,
+    errorDetails: true,
   },
   module: {
     rules: [
@@ -31,16 +36,22 @@ module.exports = {
       },
     }),
     new HtmlInlineScriptPlugin(), // 将 JS 内联到 HTML 中
-    new CopyWebpackPlugin({ // 使用 CopyWebpackPlugin
-        patterns: [
-            {
-                from: path.resolve(__dirname, 'src/android/assets/uvideo/u_video_player.html'),
-                to: path.resolve(__dirname, 'src/android/res/raw/u_video_player.html'),
-            },
-        ],
-    }),
+    // new CopyWebpackPlugin({
+    //   // 使用 CopyWebpackPlugin
+    //   patterns: [
+    //     {
+    //       from: path.resolve(
+    //         __dirname,
+    //         "src/android/assets/uvideo/u_video_player.html"
+    //       ),
+    //       to: path.resolve(
+    //         __dirname,
+    //         "src/android/res/raw/u_video_player.html"
+    //       ),
+    //     },
+    //   ],
+    // }),
   ],
   mode: "production", // 生产模式
   // 添加 `webpack` 钩子以在构建后复制 HTML 文件
-  
 };
