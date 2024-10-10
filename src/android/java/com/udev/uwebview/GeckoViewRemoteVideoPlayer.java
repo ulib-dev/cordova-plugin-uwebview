@@ -368,7 +368,7 @@ public class GeckoViewRemoteVideoPlayer extends FrameLayout {
   }
 
   void resetPlayer() {
-    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"><video id=\"player\" style=\"background-color: black;width: 100%;height: 100vh;object-fit: cover;\" autoplay muted playsinline controls><source src=\"" + blankVideoFile + "\" type=\"video/mp4\"/></video></body></html>");
+    session.loadUri("data:text/html;charset=utf-8,<html style=\"background-color: black; margin: 0;\"><body style=\"background-color: black; margin: 0;\"></body></html>");
   }
 
   public void closePlayer() {
