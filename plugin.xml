@@ -58,8 +58,8 @@
             </feature>
         </config-file>
 
-        <source-file src="src/ios/CordovaWKWebView.swift" />
-        <source-file src="src/ios/WKWebViewRemoteVideoPlayer.swift"  />
+        <source-file src="src/ios/CordovaWKWebView.swift" framework="true" />
+        <source-file src="src/ios/WKWebViewRemoteVideoPlayer.swift" framework="true" />
     </platform>
 </plugin>
  
