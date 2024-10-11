@@ -1,7 +1,7 @@
 import WebKit
 import Cordova
 
-class CordovaWKWebView: CDVPlugin {
+@objc(CordovaWKWebView)  class CordovaWKWebView: CDVPlugin {
 
     private var webView: WKWebView!
     private var callback: CDVInvokedUrlCommand?
