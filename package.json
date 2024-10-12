@@ -6,7 +6,8 @@
   "cordova": {
     "id": "cordova-plugin-uwebview",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "repository": "https://github.com/ulib-dev/cordova-plugin-uwebview",

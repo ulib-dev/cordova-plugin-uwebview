@@ -11,10 +11,10 @@
     <engines>
             <engine name="cordova" version=">=3.0.0" />
     </engines>
-    <platform name="android">
-        <js-module src="www/uwebview.js" name="uwebview">
+    <js-module src="www/uwebview.js" name="uwebview">
             <clobbers target="window.UWebView" />
-        </js-module>
+    </js-module>
+    <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="UWebView">
                 <param name="android-package" value="com.udev.uwebview.CordovaGeckoView" />
@@ -43,23 +43,31 @@
         <source-file src="src/android/assets/messaging/content.js" target-dir="assets/messaging" />  
         <source-file src="src/android/assets/messaging/manifest.json" target-dir="assets/messaging" />   
 
-        <source-file src="src/android/assets/uvideo/u_video_blank.mp4" target-dir="assets/uvideo" />
-        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="assets/uvideo" />
-        <source-file src="src/android/assets/uvideo/u_video_player.html" target-dir="res/raw" />  
-        <source-file src="src/android/assets/uvideo/u_video_blank.mp4" target-dir="res/raw" />  
+        <source-file src="src/res/u_video_player.html" target-dir="res/raw" />  
+        <source-file src="src/res/u_video_blank.mp4" target-dir="res/raw" />  
+        <source-file src="src/res/u_video_player.html" target-dir="assets/uvideo" />
+        <source-file src="src/res/u_video_blank.mp4" target-dir="assets/uvideo" />
+
+
     </platform>
-    <platform name="ios">    
-        <js-module src="www/wkwebviewvideoplayer.js" name="uwebview">
-            <clobbers target="window.UWebView" />
-        </js-module> 
+    <platform name="ios">  
         <config-file target="config.xml" parent="/*">
-            <feature name="CordovaWKWebView">
-                <param name="ios-package" value="CordovaWKWebView"  onload="true" />
+        	<!-- <preference name="SwiftVersion" value="5" /> -->
+            <feature name="UWebView">
+                <param name="ios-package" value="UWebView"  onload="true" />
             </feature>
         </config-file>
 
-        <source-file src="src/ios/CordovaWKWebView.swift" framework="true" />
-        <source-file src="src/ios/WKWebViewRemoteVideoPlayer.swift" framework="true" />
+        <resource-file src="src/res/u_video_player.html" target="Resources/u_video_player.html" />
+
+
+        <!-- <source-file src="src/ios/UWebView.swift" framework="true"/>
+        <source-file src="src/ios/UWebViewRemoteVideoPlayer.swift" framework="true"/> -->
+        <source-file src="src/ios/UWebView.h" />
+        <source-file src="src/ios/UWebView.m"/>
+        <source-file src="src/ios/UWebViewRemoteVideoPlayer.h" />
+        <source-file src="src/ios/UWebViewRemoteVideoPlayer.m"/>
+
     </platform>
 </plugin>
  

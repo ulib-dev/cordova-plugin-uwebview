@@ -6,7 +6,8 @@ const CopyWebpackPlugin = require("copy-webpack-plugin"); // 引入 CopyWebpackP
 module.exports = {
   entry: "./video-template/src/index.js", // JS 文件的入口
   output: {
-    path: path.resolve(__dirname, "src/android/assets/uvideo"),
+    // path: path.resolve(__dirname, "src/android/assets/uvideo"),
+    path: path.resolve(__dirname, "src/res"),
     filename: "bundle.js", // 不需要关心这个文件名，它会被内联
   },
   stats: {
