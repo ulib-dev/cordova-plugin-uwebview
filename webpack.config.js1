@@ -5,7 +5,7 @@ module.exports = {
     entry: './video-template/src/index.js', // JS 文件的入口
     output: {
         path: path.resolve(__dirname, 'src/android/assets/uvideo'),
-        filename: 'bundle.js', // 输出的 JS 文件
+        //filename: 'bundle.js', // 输出的 JS 文件
     },
     module: {
         rules: [{
@@ -22,14 +22,7 @@ module.exports = {
         ],
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './video-template/index.html', // 基础 HTML 模板
-            filename: 'u_video_player.html', // 指定输出的 HTML 文件名
-            inject: 'body', // 将 JS 注入到 body 中
-            minify: {
-                collapseWhitespace: true, // 压缩 HTML
-            },
-        }),
+
     ],
     mode: 'production', // 生产模式
 };

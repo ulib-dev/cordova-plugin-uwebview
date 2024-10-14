@@ -1,0 +1,51 @@
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin"); // 引入 CopyWebpackPlugin
+
+module.exports = {
+    entry: "./video-template/src/index.js", // JS 文件的入口
+    output: {
+        path: path.resolve(__dirname, "src/res"), // 输出路径
+        // filename: "bundle.js", // JS 文件名
+    },
+    stats: {
+        colors: true,
+        reasons: true,
+        errorDetails: true,
+    },
+    module: {
+        rules: [{
+                test: /\.css$/, // 提取 CSS
+                use: [MiniCssExtractPlugin.loader, "css-loader"],
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg|woff2?|eot|ttf|otf)$/, // 将图片和字体文件转换为文件
+                type: "asset/resource",
+                generator: {
+                    filename: "assets/[hash][ext][query]",
+                },
+            },
+        ],
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: "./video-template/index.html", // 基础 HTML 模板
+            filename: "u_video_player.html", // 指定输出的 HTML 文件名
+            inject: "body", // 将 JS 注入到 body 中
+            minify: {
+                collapseWhitespace: true, // 压缩 HTML
+            },
+        }),
+        new MiniCssExtractPlugin({
+            filename: "styles.css", // CSS 文件名
+        }),
+        new CopyWebpackPlugin({ // 使用 CopyWebpackPlugin
+            patterns: [{
+                from: path.resolve(__dirname, "src/android/assets/uvideo/u_video_player.html"),
+                to: path.resolve(__dirname, "src/android/res/raw/u_video_player.html"),
+            }, ],
+        }),
+    ],
+    mode: "production", // 生产模式
+};

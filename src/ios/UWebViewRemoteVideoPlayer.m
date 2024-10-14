@@ -21,6 +21,7 @@ static NSString *geckoViewRemoteVideoPlayerHtml = nil;
 
         // 初始化 WKWebView
         WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+        configuration.allowsInlineMediaPlayback=YES;
         _webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:configuration];
         _webView.backgroundColor = [UIColor blackColor];
         _webView.UIDelegate = self;
