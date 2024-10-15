@@ -164,5 +164,6 @@ class uPlayer {
         } catch (error) {}
     }
 }
-
+// 将 uPlayer 绑定到 window 对象
+window.uPlayer = uPlayer;
 export default uPlayer;
