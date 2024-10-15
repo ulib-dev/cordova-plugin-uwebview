@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.12",
+    "version": "2.0.17",
     "description": "Cordova UWebView Plugin",
     "types": "./index.d.ts",
     "cordova": {
@@ -21,7 +21,9 @@
         "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
         "start": "webpack serve --open --mode development",
         "build": "webpack --mode production && node copyFile.js",
-        "build:n": "webpack --mode production && node HtmlInlineAndCopyFile.js"
+        "build:n": "webpack --mode production && node HtmlInlineAndCopyFile.js",
+        "build:uplayer": "webpack --mode production --config webpack.config4uplayer.js && node copyUplayer.js",
+        "build:all": "npm run build && npm run build:uplayer"
     },
     "dependencies": {
         "plyr": "^3.7.8"
@@ -32,7 +34,10 @@
     "author": "Apache Software Foundation",
     "license": "Apache-2.0",
     "devDependencies": {
+        "@babel/core": "^7.25.8",
+        "@babel/preset-env": "^7.25.8",
         "@fortawesome/fontawesome-free": "^6.6.0",
+        "babel-loader": "^9.2.1",
         "copy-webpack-plugin": "^12.0.2",
         "cp-cli": "^2.0.0",
         "css-loader": "^7.1.2",

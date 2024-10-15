@@ -5,28 +5,12 @@ export declare interface PlayRemoteVideoOptions {
   x?: number;
   y?: number;
 }
-
+ 
 export declare class UWebView {
-  loadUrlWithGeckoView(
-    url: string,
-    success?: () => void,
-    error?: (err: any) => void
-  ): void;
-  
-  initVideoPlayer(
-    arg: PlayRemoteVideoOptions,
-    success?: () => void,
-    error?: (err: any) => void
-  ): void;
-  playRemoteVideo(
-    arg: PlayRemoteVideoOptions,
-    success?: () => void,
-    error?: (err: any) => void
-  ): void;
+  loadUrlWithGeckoView(url: string, success?: () => void, error?: (err: any) => void): void;
+  initVideoPlayer(arg: PlayRemoteVideoOptions, success?: () => void, error?: (err: any) => void): void;
+  playRemoteVideo(arg: PlayRemoteVideoOptions, success?: () => void, error?: (err: any) => void): void;
   destroyRemoteVideo(success?: () => void, error?: (err: any) => void): void;
-  setRemoteVideoFullScreen(
-    full: boolean,
-    success?: () => void,
-    error?: (err: any) => void
-  ): void;
+  setRemoteVideoFullScreen(full: boolean, success?: () => void, error?: (err: any) => void): void;
+  initVideoPlayer2(elId, msgCallback?: (msg: any) => void): any;
 }

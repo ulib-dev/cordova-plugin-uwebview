@@ -30,9 +30,9 @@ export class HomePage implements OnInit, AfterContentInit {
   downloadVideo(remoteURL: string, callback: any) {
     const download = (remoteURL: string, callback: any) => {
       var fileName = md5(remoteURL); // 以 MD5 作为文件名，保持扩展名
-      //var fileURL = cordova.file.dataDirectory + fileName; // 存储在应用的内部存储目录中
+      var fileURL = cordova.file.dataDirectory + fileName; // 存储在应用的内部存储目录中
       // var fileURL = cordova.file.externalRootDirectory + 'Download/' + fileName; // 下载到公共Download目录
-      var fileURL = cordova.file.externalCacheDirectory + fileName; // 存储在外部缓存目录
+      //var fileURL = cordova.file.externalCacheDirectory + fileName; // 存储在外部缓存目录
 
       // 检查文件是否已经存在
       window.resolveLocalFileSystemURL(

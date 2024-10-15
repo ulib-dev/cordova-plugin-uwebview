@@ -3,7 +3,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-uwebview"
-    version="2.0.12">
+    version="2.0.17">
     <name>UWebView</name>    
     <author>u.lib</author>
     <repo>https://github.com/ulib-dev/cordova-plugin-uwebview</repo>
@@ -12,7 +12,10 @@
             <engine name="cordova" version=">=3.0.0" />
     </engines>
     <js-module src="www/uwebview.js" name="uwebview">
-            <clobbers target="window.UWebView" />
+        <clobbers target="window.UWebView" />
+    </js-module>
+    <js-module src="www/uPlayer.js" name="uPlayer">
+        <clobbers target="uPlayer" />
     </js-module>
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -49,7 +52,7 @@
 
 
     </platform>
-    <platform name="ios">  
+    <platform name="ios">   
         <config-file target="config.xml" parent="/*">
         	<!-- <preference name="SwiftVersion" value="5" /> -->
             <feature name="UWebView">
