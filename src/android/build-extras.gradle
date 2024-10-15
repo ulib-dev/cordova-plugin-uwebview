@@ -14,6 +14,7 @@ android {
 }
 
 ext {
+    ext.cdvBuildMultipleApks=true
     geckoviewChannel = "geckoview"
     geckoviewVersion = "131.0.20241008210941"
 }

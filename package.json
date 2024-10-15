@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.18",
+    "version": "2.0.20",
     "description": "Cordova UWebView Plugin",
     "types": "./index.d.ts",
     "cordova": {

@@ -1,6 +1,7 @@
 import Plyr from "plyr";
 import "../../node_modules/plyr/dist/plyr.css";
 
+
 function uPlayer(newId, sendMessageToApp) {
     // 初始化 Plyr 播放器
     this.mySendMessageToApp = (message) => {
@@ -10,7 +11,7 @@ function uPlayer(newId, sendMessageToApp) {
     };
     const player = new Plyr("#" + newId, {
         hideControls: false, // 设置为 false，控件将不会自动隐藏
-        blankVideo: defaultVideoSrc,
+        blankVideo: '',
         resetOnEnd: true,
         controls: [
             "play-large", // 大的播放按钮

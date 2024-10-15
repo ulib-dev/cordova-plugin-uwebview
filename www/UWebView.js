@@ -26,8 +26,9 @@ var UWebView = {
     setRemoteVideoFullScreen: function(full, success, error) {
         exec(success, error, "UWebView", "setRemoteVideoFullScreen", [full ? 1 : 0]);
     },
-    initVideoPlayer2: (elId) => {
-        const playerInstance = new window.uPlayer(elId, (message) => {
+    initVideoPlayer2: (elId, msgCallback) => {
+        const _uPlayer = uPlayer || window.uPlayer;
+        const playerInstance = new _uPlayer(elId, (message) => {
             console.log(message);
             if (msgCallback != null) {
                 msgCallback(message);
