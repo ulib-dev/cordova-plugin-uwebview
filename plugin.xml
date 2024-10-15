@@ -3,7 +3,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-uwebview"
-    version="2.0.8">
+    version="2.0.12">
     <name>UWebView</name>    
     <author>u.lib</author>
     <repo>https://github.com/ulib-dev/cordova-plugin-uwebview</repo>
@@ -67,6 +67,8 @@
         <source-file src="src/ios/UWebViewRemoteVideoPlayer.h" />
         <source-file src="src/ios/UWebViewRemoteVideoPlayer.m"/>
 
+        <source-file src="src/res/u_video_player.html" target-dir="www/uvideo" />
+        <source-file src="src/res/u_video_blank.mp4" target-dir="www/uvideo" />
     </platform>
 </plugin>
  
