@@ -10,7 +10,7 @@ class uPlayer {
                 sendMessageToApp(message);
             }
         };
-
+        document.getElementById(this.playerElId).style.display = "block";
         this.player = new Plyr("#" + playerElId, {
             hideControls: false,
             blankVideo: "defaultVideoSrc",
@@ -124,6 +124,7 @@ class uPlayer {
 
     changeVideoUrl(url) {
         const video = document.getElementById(this.playerElId);
+        video.style.display = "block";
         //const source = document.getElementById("videoSource");
         const source = video.querySelector("source")[0];
         source.src = url;
@@ -154,14 +155,24 @@ class uPlayer {
         });
         video.load(); // 重新加载视频
     }
-
+    stop() {
+        try {
+            this.player.stop();
+        } catch (error) {
+            console.error("stop video", error);
+        }
+    }
     destroy() {
         try {
             this.player.destroy();
-        } catch (error) {}
+        } catch (error) {
+            console.error("destroy video", error);
+        }
         try {
-            document.getElementById(this.playerElId).remove();
-        } catch (error) {}
+            document.getElementById(this.playerElId).style.display = "none";
+        } catch (error) {
+            console.error("destroy video", error);
+        }
     }
 }
 // 将 uPlayer 绑定到 window 对象

@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-uwebview",
-    "version": "2.0.20",
+    "version": "2.0.24",
     "description": "Cordova UWebView Plugin",
     "types": "./index.d.ts",
     "cordova": {
@@ -53,5 +53,8 @@
         "webpack": "^5.95.0",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.1.0"
+    },
+    "volta": {
+        "node": "20.18.0"
     }
 }
